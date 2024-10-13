@@ -39,6 +39,18 @@ npm install
 
 ---
 
+## Demo
+![alt text](readme-assets/calendar-sc-1.png)
+![alt text](readme-assets/calendar-sc-2.png)
+![alt text](readme-assets/calendar-sc-3.png)
+![alt text](readme-assets/calendar-sc-4.png)
+![alt text](readme-assets/calendar-sc-5.png)
+![alt text](readme-assets/calendar-sc-6.png)
+
+
+
+
+
 ## Usage
 
 ### Scheduler Wrapper
