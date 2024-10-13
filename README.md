@@ -7,6 +7,7 @@ Welcome to the **Scheduler Library**! This React-based scheduling library helps 
 - [Installation](#installation)
 - [Usage](#usage)
   - [Scheduler Wrapper](#scheduler-wrapper)
+  - [Views Explained](#views-explained)
 - [Context Provider Setup](#context-provider-setup)
   - [Handlers Explained](#handlers-explained)
   - [Getters Explained](#getters-explained)
@@ -64,6 +65,51 @@ This wrapper ensures the **SchedulerView** is correctly rendered inside your com
 
 ---
 
+## Views Explained
+
+The **Scheduler Library** provides multiple views to efficiently manage events across different time frames.
+
+### 1. **Daily View**
+Displays events for a specific day, broken down into hourly slots.
+
+```javascript
+import DailyView from './components/DailyView';
+
+function App() {
+  return <DailyView />;
+}
+```
+- **Usage**: Ideal for managing events that span hours.
+- **Feature**: Shows a timeline with drag-to-add event functionality.
+
+### 2. **Weekly View**
+Shows a week's worth of events, helping you get an overview of tasks across multiple days.
+
+```javascript
+import WeeklyView from './components/WeeklyView';
+
+function App() {
+  return <WeeklyView />;
+}
+```
+- **Usage**: Perfect for planning meetings and activities over several days.
+- **Feature**: Displays overlapping events side-by-side with dynamic widths.
+
+### 3. **Monthly View**
+Provides an overview of events for an entire month.
+
+```javascript
+import MonthView from './components/MonthView';
+
+function App() {
+  return <MonthView />;
+}
+```
+- **Usage**: Useful for scheduling long-term events or campaigns.
+- **Feature**: Supports compact event previews with a "Show More" option.
+
+---
+
 ## Context Provider Setup
 
 Wrap your application with the `SchedulerProvider` to manage event state and actions.
@@ -87,7 +133,7 @@ function App() {
 
 ## Handlers Explained
 
-Handlers define logic for managing event styling. This ensures that overlapping events display correctly and that events are positioned dynamically within the scheduler view.
+Handlers define logic for managing event styling. This ensures that overlapping events display correctly and are positioned dynamically within the scheduler view.
 
 ```javascript
 handlers.handleEventStyling(event, dayEvents);
@@ -95,49 +141,49 @@ handlers.handleEventStyling(event, dayEvents);
 
 ### Breakdown:
 - **`handleEventStyling(event, dayEvents)`**: 
-  - Calculates the top position and height for each event.
-  - Adjusts the event's position if it overlaps with others.
-  - Returns an object with:
-    - `height`: Calculated event height.
-    - `top`: Top offset for event positioning.
-    - `left`: Horizontal positioning if there are multiple events in the same slot.
-    - `zIndex`: Stacking order for overlapping events.
-    - `maxWidth`, `minWidth`: Width management for overlapping events.
+  - **Calculates**: Top position and height for each event.
+  - **Adjusts**: The event's position if it overlaps with others.
+  - **Returns**:  
+    - `height`: Event height based on duration.  
+    - `top`: Vertical offset for event positioning.  
+    - `left`: Horizontal position for overlapping events.  
+    - `zIndex`: Stacking order of events.  
+    - `maxWidth`, `minWidth`: Widths for overlapping events.
 
 ---
 
 ## Getters Explained
 
-Getters provide utility methods for retrieving and manipulating scheduling data.
+Getters provide utility methods to retrieve and manipulate scheduling data.
 
 ### List of Getters:
 
 1. **`getDaysInMonth(month, year)`**:  
-   - Returns an array of days in a specific month, each with its corresponding events.
+   - Returns an array of days in a month, each with its corresponding events.
    ```javascript
    const days = getters.getDaysInMonth(9, 2024);
    ```
 
 2. **`getEventsForDay(day, currentDate)`**:  
-   - Filters and returns the list of events for a specific day.
+   - Retrieves the list of events for a specific day.
    ```javascript
    const events = getters.getEventsForDay(12, new Date());
    ```
 
 3. **`getDaysInWeek(week, year)`**:  
-   - Returns an array of `Date` objects for the days in a given week of the year.
+   - Provides an array of `Date` objects for a given week.
    ```javascript
    const weekDays = getters.getDaysInWeek(42, 2024);
    ```
 
 4. **`getWeekNumber(date)`**:  
-   - Calculates the week number of a given date in the year.
+   - Calculates the week number for a specific date.
    ```javascript
    const weekNumber = getters.getWeekNumber(new Date());
    ```
 
 5. **`getDayName(day)`**:  
-   - Returns the name of the day (e.g., "Mon", "Tue").
+   - Returns the name of the day (e.g., "Mon").
    ```javascript
    const dayName = getters.getDayName(1); // Output: "Mon"
    ```
@@ -165,10 +211,12 @@ showModal({
 
 ## Contributing
 
-We welcome contributions! If you'd like to contribute:
+We are actively seeking contributors to improve the **Scheduler Library**! If you'd like to contribute:
 1. Fork the repository.
 2. Create a new branch for your feature.
 3. Submit a pull request for review.
+
+We appreciate all contributions, whether you're fixing bugs, enhancing documentation, or introducing new features!
 
 ---
 
@@ -178,4 +226,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Thank you for using the my Scheduler Library! Feel free to reach out if you encounter any issues or need further assistance.
+Thank you for using the Scheduler Library! Feel free to reach out if you encounter any issues or need further assistance. We look forward to your contributions and feedback!
