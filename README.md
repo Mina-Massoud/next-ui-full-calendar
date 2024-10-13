@@ -225,4 +225,5 @@ This project is licensed under the MIT License.
 
 ---
 
-Thank you for using the Scheduler Library! Feel free to reach out if you encounter any issues or need further assistance. We look forward to your contributions and feedback!
+Thank you, feel free to follow me on linkedIn : https://www.linkedin.com/in/mina-melad/
+contact with me and discover my portfolio : https://mina-massoud.onrender.com/
