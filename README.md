@@ -33,7 +33,6 @@ To get started, clone the repository from GitHub:
 
 ```bash
 git clone https://github.com/your-username/scheduler-library.git
-cd scheduler-library
 npm install
 ```
 
@@ -223,7 +222,7 @@ showModal({
 
 ## Contributing
 
-We are actively seeking contributors to improve the **Scheduler Library**! If you'd like to contribute:
+We are actively seeking contributors to improve the **Our Scheduler Library**! If you'd like to contribute:
 1. Fork the repository.
 2. Create a new branch for your feature.
 3. Submit a pull request for review.
@@ -238,4 +237,5 @@ This project is licensed under the MIT License.
 
 ---
 
-Thank you for using the Scheduler Library! Feel free to reach out if you encounter any issues or need further assistance. We look forward to your contributions and feedback!
+Thank you, feel free to follow me on linkedIn : https://www.linkedin.com/in/mina-melad/
+contact with me and discover my portfolio : https://mina-massoud.onrender.com/
