@@ -45,6 +45,8 @@ npm install
 ![alt text](readme-assets/calendar-sc-4.png)
 ![alt text](readme-assets/calendar-sc-5.png)
 ![alt text](readme-assets/calendar-sc-6.png)
+![alt text](readme-assets/calendar-sc-1-light.png)
+
 
 
 
