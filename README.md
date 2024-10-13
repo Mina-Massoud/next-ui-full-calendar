@@ -33,7 +33,6 @@ To get started, clone the repository from GitHub:
 
 ```bash
 git clone https://github.com/your-username/scheduler-library.git
-cd scheduler-library
 npm install
 ```
 
