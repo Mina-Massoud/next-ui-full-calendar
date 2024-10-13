@@ -16,7 +16,7 @@ import SelectDate from "@/components/schedule/_components/add-event-components/s
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useScheduler } from "@/providers/schedular-provider";
+import { useScheduler, Variant } from "@/providers/schedular-provider";
 import { v4 as uuidv4 } from "uuid"; // Use UUID to generate event IDs
 import { Event } from "@/providers/schedular-provider"; // Import Event type
 
@@ -33,8 +33,11 @@ const eventSchema = z.object({
 export type EventFormData = z.infer<typeof eventSchema>;
 
 export default function AddEventModal() {
-  const [selectedColor, setSelectedColor] = useState<string>("blue");
   const { onClose, data } = useModalContext();
+
+  const [selectedColor, setSelectedColor] = useState<string>(
+    getEventColor(data?.variant || "primary")
+  );
 
   const typedData = data as Event;
 
@@ -53,8 +56,8 @@ export default function AddEventModal() {
       description: "",
       startDate: new Date(),
       endDate: new Date(),
-      variant: "primary",
-      color: "blue",
+      variant: data?.variant || "primary",
+      color: data?.color || "blue",
     },
   });
 
@@ -79,8 +82,19 @@ export default function AddEventModal() {
     { key: "yellow", name: "Yellow" },
   ];
 
-  function getEventColor(color: string) {
-    return `bg-${color}-500`;
+  function getEventColor(variant: Variant) {
+    switch (variant) {
+      case "primary":
+        return "blue";
+      case "danger":
+        return "red";
+      case "success":
+        return "green";
+      case "warning":
+        return "yellow";
+      default:
+        return "blue";
+    }
   }
 
   function getEventStatus(color: string) {
@@ -150,7 +164,11 @@ export default function AddEventModal() {
           onSelectionChange={(keys) => {
             const color = (keys.currentKey as string) || "blue";
             setSelectedColor(color);
-            reset((formData) => ({ ...formData, color }));
+
+            reset((formData) => ({
+              ...formData,
+              variant: getEventStatus(color),
+            }));
           }}
         >
           {colorOptions.map((color) => (

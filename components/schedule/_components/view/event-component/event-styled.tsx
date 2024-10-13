@@ -4,11 +4,6 @@ import { Chip } from "@nextui-org/react";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/site/global/modals/events/add-event-modal";
 
-// Function to get a random variant
-const getRandomVariant = (): Variant => {
-  return variants[Math.floor(Math.random() * variants.length)];
-};
-
 // Function to format date
 const formatDate = (date: Date) => {
   return date.toLocaleString("en-US", {
@@ -31,13 +26,15 @@ export default function EventStyled({
   startDate,
   description,
   endDate,
+  variant,
   minmized = false,
 }: EventStyledProps) {
-  const variant = useMemo(() => getRandomVariant(), []);
   const { showModal: showEventModal } = useModalContext();
 
   // Handler function
   function handleEditEvent(event: Event) {
+    console.log("Edit event", event);
+
     showEventModal({
       title: event?.title,
       body: <AddEventModal />,
@@ -51,7 +48,14 @@ export default function EventStyled({
     <div
       onClickCapture={(e) => {
         e.stopPropagation(); // Stop event from propagating to parent
-        handleEditEvent({ id, title, startDate, endDate, description });
+        handleEditEvent({
+          id,
+          title,
+          startDate,
+          endDate,
+          description,
+          variant,
+        });
       }}
       key={id}
       className="w-full use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
