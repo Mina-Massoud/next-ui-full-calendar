@@ -210,7 +210,7 @@ showModal({
 
 ## Contributing
 
-We are actively seeking contributors to improve the **Scheduler Library**! If you'd like to contribute:
+We are actively seeking contributors to improve the **Our Scheduler Library**! If you'd like to contribute:
 1. Fork the repository.
 2. Create a new branch for your feature.
 3. Submit a pull request for review.
