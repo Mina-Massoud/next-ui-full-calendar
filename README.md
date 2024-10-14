@@ -32,7 +32,7 @@ Welcome to the **Scheduler Library**! This React-based scheduling library helps 
 To get started, clone the repository from GitHub:
 
 ```bash
-git clone https://github.com/your-username/scheduler-library.git
+git clone https://github.com/Mina-Massoud/next-ui-full-calendar.git
 npm install
 ```
 
