@@ -40,7 +40,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
         )}
       >
         <SchedulerProvider>
@@ -48,20 +48,19 @@ export default function RootLayout({
             <Providers
               themeProps={{ attribute: "class", defaultTheme: "dark" }}
             >
-              <Navbar/>
+              <Navbar />
               <div className="relative flex flex-col h-screen">
-                <main className=" w-full pt-16 px-6 flex-grow">
-                  {children}
-                </main>
-                <footer className="w-full flex items-center justify-center py-3">
+                <main className=" w-full pt-16 px-6 flex-grow">{children}</main>
+                <footer className="w-full flex items-center gap-3  justify-center py-3">
+                <span className="text-default-600">For Contacting</span>
+
                   <Link
                     isExternal
                     className="flex items-center gap-1 text-current"
-                    href="https://nextui-docs-v2.vercel.app?utm_source=next-app-template"
+                    href="https://mina-massoud.onrender.com/"
                     title="nextui.org homepage"
                   >
-                    <span className="text-default-600">Powered by</span>
-                    <p className="text-primary">NextUI</p>
+                    Mina Massoud
                   </Link>
                 </footer>
               </div>

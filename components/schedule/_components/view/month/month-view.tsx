@@ -133,7 +133,6 @@ export default function MonthView() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          exit="hidden"
           key={currentDate.getMonth()}
           className="grid grid-cols-7 gap-1 sm:gap-2"
         >

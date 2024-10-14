@@ -10,8 +10,11 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
+		"@internationalized/date": "^3.5.6",
 		"@nextui-org/button": "2.0.38",
 		"@nextui-org/calendar": "^2.0.12",
+		"@nextui-org/card": "^2.0.34",
+		"@nextui-org/chip": "^2.0.33",
 		"@nextui-org/code": "2.0.33",
 		"@nextui-org/date-input": "^2.1.4",
 		"@nextui-org/date-picker": "^2.1.8",
