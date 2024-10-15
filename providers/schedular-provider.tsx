@@ -8,6 +8,7 @@ import React, {
   ReactNode,
   Dispatch,
 } from "react";
+import { z } from "zod";
 
 // Define event and state types
 export interface Event {
@@ -74,6 +75,18 @@ export const variants = [
 ] as const;
 
 export type Variant = (typeof variants)[number];
+
+// Define Zod schema for form validation
+export const eventSchema = z.object({
+  title: z.string().nonempty("Event name is required"),
+  description: z.string().optional(),
+  startDate: z.date(),
+  endDate: z.date(),
+  variant: z.enum(["primary", "danger", "success", "warning", "default"]),
+  color: z.string().nonempty("Color selection is required"),
+});
+
+export type EventFormData = z.infer<typeof eventSchema>;
 
 // Initial state
 const initialState: SchedulerState = {
@@ -359,7 +372,6 @@ export const SchedulerProvider = ({ children }: { children: ReactNode }) => {
         e.startDate < event.endDate && e.endDate > event.startDate // Any overlap
       );
     });
-
 
     const numEventsOnHour = eventsOnHour.length || 1;
     const indexOnHour = eventsOnHour.indexOf(event);

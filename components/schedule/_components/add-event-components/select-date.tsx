@@ -1,6 +1,6 @@
 "use client";
 
-import { EventFormData } from "@/components/site/global/modals/events/add-event-modal";
+import { EventFormData } from "@/providers/schedular-provider";
 import { parseDate, CalendarDate, Time } from "@internationalized/date";
 import { DateRangePicker } from "@nextui-org/date-picker";
 import { TimeInput } from "@nextui-org/date-input";
@@ -10,7 +10,7 @@ import { UseFormSetValue } from "react-hook-form";
 
 function getFormattedDate(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
-    date.getDate()
+    date.getDate(),
   ).padStart(2, "0")}`;
 }
 
@@ -37,11 +37,11 @@ export default function SelectDate({
 
     startTime: new Time(
       data?.startDate?.getHours() || 0,
-      data?.startDate?.getMinutes() || 0
+      data?.startDate?.getMinutes() || 0,
     ),
     endTime: new Time(
       data?.endDate?.getHours() || 0,
-      data?.endDate?.getMinutes() || 0
+      data?.endDate?.getMinutes() || 0,
     ),
   });
 
@@ -77,13 +77,13 @@ export default function SelectDate({
             const startDate = new Date(
               start?.year || 0,
               (start?.month || 1) - 1,
-              start?.day || 1
+              start?.day || 1,
             );
 
             const endDate = new Date(
               end?.year || 0,
               (end?.month || 1) - 1,
-              end?.day || 1
+              end?.day || 1,
             );
 
             setDateState({

@@ -15,23 +15,15 @@ import {
 import { useModalContext } from "@/providers/modal-provider";
 import SelectDate from "@/components/schedule/_components/add-event-components/select-date";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useScheduler, Variant } from "@/providers/schedular-provider";
+import {
+  EventFormData,
+  eventSchema,
+  useScheduler,
+  Variant,
+} from "@/providers/schedular-provider";
 import { v4 as uuidv4 } from "uuid"; // Use UUID to generate event IDs
 import { Event } from "@/providers/schedular-provider"; // Import Event type
-
-// Define Zod schema for form validation
-const eventSchema = z.object({
-  title: z.string().nonempty("Event name is required"),
-  description: z.string().optional(),
-  startDate: z.date(),
-  endDate: z.date(),
-  variant: z.enum(["primary", "danger", "success", "warning", "default"]),
-  color: z.string().nonempty("Color selection is required"),
-});
-
-export type EventFormData = z.infer<typeof eventSchema>;
 
 export default function AddEventModal() {
   const { onClose, data } = useModalContext();
