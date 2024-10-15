@@ -4,9 +4,9 @@ import { Event, useScheduler } from "@/providers/schedular-provider";
 import { Chip } from "@nextui-org/chip";
 import { motion } from "framer-motion"; // Import Framer Motion
 import { useModalContext } from "@/providers/modal-provider";
-import AddEventModal from "@/components/site/global/modals/events/add-event-modal";
+import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
-import ShowMoreEventsModal from "@/components/site/global/modals/events/show-more-events-modal";
+import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
 import { Button } from "@nextui-org/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";

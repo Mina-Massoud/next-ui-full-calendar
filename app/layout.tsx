@@ -50,8 +50,8 @@ export default function RootLayout({
             >
               <Navbar />
               <div className="relative flex flex-col h-screen">
-                <main className=" w-full pt-16 px-6 flex-grow">{children}</main>
-                <footer className="w-full flex items-center gap-3  justify-center py-3">
+                <main className="w-full p-6 flex-grow">{children}</main>
+                <footer className="w-full flex items-center gap-3 justify-center py-3">
                 <span className="text-default-600">For Contacting</span>
 
                   <Link

@@ -1,15 +1,17 @@
 "use client";
 
-import { Button, Tab, Tabs } from "@nextui-org/react";
-import { Calendar, CalendarDaysIcon, PlusIcon } from "lucide-react";
 import React from "react";
-import { BsCalendarMonth, BsCalendarWeek } from "react-icons/bs";
-import MonthView from "./month/month-view";
 import { motion } from "framer-motion";
-import WeeklyView from "./week/week-view";
+import { Button } from "@nextui-org/button";
+import { Tabs, Tab } from "@nextui-org/tabs";
+import { Calendar, CalendarDaysIcon } from "lucide-react";
+import { BsCalendarMonth, BsCalendarWeek } from "react-icons/bs";
+
+import AddEventModal from "../../_modals/add-event-modal";
 import DailyView from "./day/daily-view";
+import MonthView from "./month/month-view";
+import WeeklyView from "./week/week-view";
 import { useModalContext } from "@/providers/modal-provider";
-import AddEventModal from "@/components/site/global/modals/events/add-event-modal";
 
 // Animation settings for Framer Motion
 const animationConfig = {

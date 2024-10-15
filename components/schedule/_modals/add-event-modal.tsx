@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { ModalFooter } from "@nextui-org/modal";
+import { Button } from "@nextui-org/button";
+import { Input, Textarea } from "@nextui-org/input";
+
 import {
-  ModalFooter,
-  Button,
-  Input,
-  Textarea,
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/react";
+} from "@nextui-org/dropdown";
+
 import { useModalContext } from "@/providers/modal-provider";
 import SelectDate from "@/components/schedule/_components/add-event-components/select-date";
 import { SubmitHandler, useForm } from "react-hook-form";

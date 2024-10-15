@@ -1,19 +1,18 @@
 "use client";
-import { Card } from "@nextui-org/card";
+
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Event, useScheduler } from "@/providers/schedular-provider";
 import { Button } from "@nextui-org/button";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Card } from "@nextui-org/card";
 import { Chip } from "@nextui-org/chip";
-import EventStyled from "../event-component/event-styled";
-import { useModalContext } from "@/providers/modal-provider";
-import AddEventModal from "@/components/site/global/modals/events/add-event-modal";
-import ShowMoreEventsModal from "@/components/site/global/modals/events/show-more-events-modal";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
 
-// Helper function to get the days in a given month and year
-
+import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useModalContext } from "@/providers/modal-provider";
+import AddEventModal from "@/components/schedule/_modals/add-event-modal";
+import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
+import EventStyled from "../event-component/event-styled";
 export default function MonthView() {
   const daysOfWeek = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
   const { getters, state } = useScheduler();
@@ -159,10 +158,14 @@ export default function MonthView() {
                   className="shadow-md  relative flex p-4 border border-default-100 h-full"
                   onClick={() => handleAddEvent(dayObj.day)}
                 >
-                  <div className={clsx(
-                    'font-semibold text-3xl mb-1'
-                    , dayEvents.length > 0 ? 'text-primary-600' : 'text-muted-foreground'
-                  )}>
+                  <div
+                    className={clsx(
+                      "font-semibold text-3xl mb-1",
+                      dayEvents.length > 0
+                        ? "text-primary-600"
+                        : "text-muted-foreground"
+                    )}
+                  >
                     {dayObj.day}
                   </div>
                   <div className="flex-grow flex flex-col gap-2  w-full overflow-hidden">

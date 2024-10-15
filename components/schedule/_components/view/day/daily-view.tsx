@@ -1,18 +1,20 @@
+"use client"
+
 import React, { useRef, useState } from "react";
-import { Event, useScheduler } from "@/providers/schedular-provider";
-import { Chip } from "@nextui-org/chip";
 import { motion } from "framer-motion";
-import { useModalContext } from "@/providers/modal-provider";
-import AddEventModal from "@/components/site/global/modals/events/add-event-modal";
-import EventStyled from "../event-component/event-styled";
 import { Button } from "@nextui-org/button";
+import { Chip } from "@nextui-org/chip";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+
+import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useModalContext } from "@/providers/modal-provider";
+import AddEventModal from "@/components/schedule/_modals/add-event-modal";
+import EventStyled from "../event-component/event-styled";
 
 const hours = Array.from(
   { length: 24 },
   (_, i) => `${i.toString().padStart(2, "0")}:00`
 );
-const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 // Animation variants
 const containerVariants = {
