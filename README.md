@@ -93,7 +93,7 @@ function App() {
 }
 ```
 - **Usage**: Ideal for managing events that span hours.
-- **Feature**: Shows a timeline with drag-to-add event functionality.
+- **Feature**: Shows a timeline with adding event functionality.
 
 ### 2. **Weekly View**
 Shows a week's worth of events, helping you get an overview of tasks across multiple days.
