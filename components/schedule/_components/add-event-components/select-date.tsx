@@ -10,7 +10,7 @@ import { UseFormSetValue } from "react-hook-form";
 
 function getFormattedDate(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(
-    date.getDate(),
+    date.getDate()
   ).padStart(2, "0")}`;
 }
 
@@ -37,11 +37,11 @@ export default function SelectDate({
 
     startTime: new Time(
       data?.startDate?.getHours() || 0,
-      data?.startDate?.getMinutes() || 0,
+      data?.startDate?.getMinutes() || 0
     ),
     endTime: new Time(
       data?.endDate?.getHours() || 0,
-      data?.endDate?.getMinutes() || 0,
+      data?.endDate?.getMinutes() || 0
     ),
   });
 
@@ -57,6 +57,11 @@ export default function SelectDate({
 
     jsEndDate.setHours(dateState?.endTime?.hour || 0);
     jsEndDate.setMinutes(dateState?.endTime?.minute || 0);
+
+    // check if the end date is before the start date
+    if (jsEndDate < jsStartDate) {
+      jsEndDate.setHours(jsStartDate.getHours() + 1);
+    }
 
     setValue("startDate", jsStartDate);
     setValue("endDate", jsEndDate);
@@ -77,13 +82,13 @@ export default function SelectDate({
             const startDate = new Date(
               start?.year || 0,
               (start?.month || 1) - 1,
-              start?.day || 1,
+              start?.day || 1
             );
 
             const endDate = new Date(
               end?.year || 0,
               (end?.month || 1) - 1,
-              end?.day || 1,
+              end?.day || 1
             );
 
             setDateState({
@@ -105,10 +110,13 @@ export default function SelectDate({
               });
             }}
             isInvalid={
-              dateState?.startTime?.hour + dateState?.startTime?.minute >
-              dateState?.endTime?.hour + dateState?.endTime?.minute
+              dateState?.startTime &&
+              dateState?.endTime &&
+              dateState.startTime.hour * 60 + dateState.startTime.minute >=
+                dateState.endTime.hour * 60 + dateState.endTime.minute
             }
           />
+
           <TimeInput
             label="End Time"
             defaultValue={dateState?.endTime}
@@ -119,8 +127,10 @@ export default function SelectDate({
               });
             }}
             isInvalid={
-              dateState?.endTime?.hour + dateState?.endTime?.minute <
-              dateState?.startTime?.hour + dateState?.startTime?.minute
+              dateState?.startTime &&
+              dateState?.endTime &&
+              dateState.endTime.hour * 60 + dateState.endTime.minute <=
+                dateState.startTime.hour * 60 + dateState.startTime.minute
             }
           />
         </div>

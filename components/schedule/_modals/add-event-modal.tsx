@@ -25,7 +25,11 @@ import {
 import { v4 as uuidv4 } from "uuid"; // Use UUID to generate event IDs
 import { Event } from "@/providers/schedular-provider"; // Import Event type
 
-export default function AddEventModal() {
+export default function AddEventModal({
+  CustomAddEventModal,
+}: {
+  CustomAddEventModal?: React.FC<{ register: any; errors: any }>;
+}) {
   const { onClose, data } = useModalContext();
 
   const [selectedColor, setSelectedColor] = useState<string>(
@@ -34,7 +38,7 @@ export default function AddEventModal() {
 
   const typedData = data as Event;
 
-  const { dispatch } = useScheduler();
+  const { handlers } = useScheduler();
 
   const {
     register,
@@ -115,76 +119,86 @@ export default function AddEventModal() {
       description: formData.description,
     };
 
-    if (!typedData?.id) dispatch({ type: "ADD_EVENT", payload: newEvent });
-    else
-      dispatch({ type: "UPDATE_EVENT", payload: { ...newEvent, id: data.id } });
+    if (!typedData?.id) handlers.handleAddEvent(newEvent);
+    else handlers.handleUpdateEvent(newEvent, typedData.id);
     onClose(); // Close the modal after submission
   };
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        {...register("title")}
-        label="Event Name"
-        placeholder="Enter event name"
-        variant="bordered"
-        isInvalid={!!errors.title}
-        errorMessage={errors.title?.message}
-      />
-      <Textarea
-        {...register("description")}
-        label="Description"
-        placeholder="Enter event description"
-        variant="bordered"
-      />
-      <SelectDate data={data} setValue={setValue} />
+      {CustomAddEventModal ? (
+        CustomAddEventModal({ register, errors })
+      ) : (
+        <>
+          <Input
+            {...register("title")}
+            label="Event Name"
+            placeholder="Enter event name"
+            variant="bordered"
+            isInvalid={!!errors.title}
+            errorMessage={errors.title?.message}
+          />
+          <Textarea
+            {...register("description")}
+            label="Description"
+            placeholder="Enter event description"
+            variant="bordered"
+          />
+          <SelectDate data={data} setValue={setValue} />
 
-      <Dropdown backdrop="blur">
-        <DropdownTrigger>
-          <Button
-            variant="flat"
-            className="justify-between w-fit my-4"
-            color={getEventStatus(selectedColor)}
-          >
-            {colorOptions.find((color) => color.key === selectedColor)?.name}
-          </Button>
-        </DropdownTrigger>
-        <DropdownMenu
-          aria-label="Color selection"
-          variant="flat"
-          selectionMode="single"
-          selectedKeys={[selectedColor]}
-          onSelectionChange={(keys) => {
-            const color = (keys.currentKey as string) || "blue";
-            setSelectedColor(color);
+          <Dropdown backdrop="blur">
+            <DropdownTrigger>
+              <Button
+                variant="flat"
+                className="justify-between w-fit my-4"
+                color={getEventStatus(selectedColor)}
+              >
+                {
+                  colorOptions.find((color) => color.key === selectedColor)
+                    ?.name
+                }
+              </Button>
+            </DropdownTrigger>
+            <DropdownMenu
+              aria-label="Color selection"
+              variant="flat"
+              selectionMode="single"
+              selectedKeys={[selectedColor]}
+              onSelectionChange={(keys) => {
+                const color = (keys.currentKey as string) || "blue";
+                setSelectedColor(color);
 
-            reset((formData) => ({
-              ...formData,
-              variant: getEventStatus(color),
-            }));
-          }}
-        >
-          {colorOptions.map((color) => (
-            <DropdownItem
-              key={color.key}
-              startContent={
-                <div className={`w-4 h-4 rounded-full bg-${color.key}-500`} />
-              }
+                reset((formData) => ({
+                  ...formData,
+                  variant: getEventStatus(color),
+                }));
+              }}
             >
-              {color.name}
-            </DropdownItem>
-          ))}
-        </DropdownMenu>
-      </Dropdown>
+              {colorOptions.map((color) => (
+                <DropdownItem
+                  key={color.key}
+                  startContent={
+                    <div
+                      className={`w-4 h-4 rounded-full bg-${color.key}-500`}
+                    />
+                  }
+                >
+                  {color.name}
+                </DropdownItem>
+              ))}
+            </DropdownMenu>
+          </Dropdown>
 
-      <ModalFooter className="px-0">
-        <Button color="danger" variant="light" onPress={onClose}>
-          Cancel
-        </Button>
-        <Button color="primary" type="submit">
-          Save Event
-        </Button>
-      </ModalFooter>
+          <ModalFooter className="px-0">
+            <Button color="danger" variant="light" onPress={onClose}>
+              Cancel
+            </Button>
+            <Button color="primary" type="submit">
+              Save Event
+            </Button>
+          </ModalFooter>
+        </>
+      )}
     </form>
   );
 }

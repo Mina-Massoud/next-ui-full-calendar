@@ -40,33 +40,28 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable,
+          fontSans.variable
         )}
       >
-        <SchedulerProvider>
-          <ModalProvider>
-            <Providers
-              themeProps={{ attribute: "class", defaultTheme: "dark" }}
-            >
-              <Navbar />
-              <div className="relative flex flex-col h-screen">
-                <main className="w-full p-6 flex-grow">{children}</main>
-                <footer className="w-full flex items-center gap-3 justify-center py-3">
+       
+          <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+            <Navbar />
+            <div className="relative flex flex-col h-screen">
+              <main className="w-full flex-grow">{children}</main>
+              <footer className="w-full flex items-center gap-3 justify-center py-3">
                 <span className="text-default-600">For Contacting</span>
 
-                  <Link
-                    isExternal
-                    className="flex items-center gap-1 text-current"
-                    href="https://mina-massoud.onrender.com/"
-                    title="nextui.org homepage"
-                  >
-                    Mina Massoud
-                  </Link>
-                </footer>
-              </div>
-            </Providers>
-          </ModalProvider>
-        </SchedulerProvider>
+                <Link
+                  isExternal
+                  className="flex items-center gap-1 text-current"
+                  href="https://mina-massoud.onrender.com/"
+                  title="nextui.org homepage"
+                >
+                  Mina Massoud
+                </Link>
+              </footer>
+            </div>
+          </Providers>
       </body>
     </html>
   );

@@ -10,7 +10,7 @@ export default function ShowMoreEventsModal() {
   return (
     <div className="flex flex-col gap-2">
       {dayEvents.map((event: Event) => (
-        <EventStyled key={event.id} {...event} />
+        <EventStyled key={event.id} event={{ ...event }} />
       ))}
     </div>
   );

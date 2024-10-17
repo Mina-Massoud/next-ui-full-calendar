@@ -1,254 +1,342 @@
-🚧 **Beta Version** 🚧
+# Mina Scheduler Library
 
-This package is currently in **beta** and may contain bugs or incomplete features. Please use it with caution and feel free to contribute or report any issues.
-
-
-# Scheduler Library for React
-
-Welcome to the **Mina Calendar**! This React-based scheduling library helps you manage events across daily, weekly, and monthly views with customizable modals and smooth animations.
-
-## Table of Contents
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-  - [Scheduler Wrapper](#scheduler-wrapper)
-  - [Views Explained](#views-explained)
-- [Context Provider Setup](#context-provider-setup)
-  - [Handlers Explained](#handlers-explained)
-  - [Getters Explained](#getters-explained)
-- [Custom Modals and Styling](#custom-modals-and-styling)
-- [Contributing](#contributing)
-- [License](#license)
-
----
+Welcome to the **Mina Scheduler Library**, a customizable and flexible calendar component for React that allows you to manage and display events in day, week, or month views. This library uses **Next UI** components for its user interface, so to ensure a consistent UI experience, make sure to use it inside a **Next UI** project.
 
 ## Features
-- **Daily, Weekly, and Monthly Views**: Navigate through events by day, week, or month.
-- **Add, Update, Remove Events**: Manage events easily with modals and state management.
-- **Smooth Animations**: Utilize `framer-motion` for smooth transitions.
-- **Custom Event Styling**: Adjust layout dynamically based on event overlap and size.
-- **Context Management**: Use the Scheduler context with React's `useReducer`.
-- **Integration with Modals**: Support for `@nextui-org` components and custom modals.
 
----
+- **Day, Week, Month Views:** Switch between different calendar views with ease.
+- **Event Management:** Add, update, and delete events with built-in form validation.
+- **Customizable UI:** Easily customize the look and feel of the calendar, including buttons, tabs, and event modals.
+- **Mobile-Friendly:** Responsive design optimized for mobile devices.
+- **Framer Motion Animations:** Smooth transitions between views.
+- **Zod Validation:** Schema validation for ensuring valid event data.
+- **Next UI Integration:** Leverages Next UI for a seamless user interface.
 
 ## Installation
-> **Note:** This library requires a <span style="color:yellow;">NextUI</span> project to work.
-> ### Coming Soon: <span style="color:yellow;">ShadCN UI</span> Support
-To get started, clone the repository from GitHub:
+
+To install the library, run:
 
 ```bash
-git clone https://github.com/Mina-Massoud/next-ui-full-calendar.git
-npm install
+npm install mina-scheduler
 ```
 
-### TailwindCSS Configuration
+### Note:
+Since this library is built using **Next UI** components, it's recommended to use it within a **Next UI** project to maintain the same UI experience.
 
-If you installed the package via ```npm i mina-calendar``` To ensure the styles work correctly, you need to add the following line to the `content` section of your `tailwind.config.js`:
+## Basic Usage
 
-```js
-"./node_modules/mina-calendar/dist/**/*.{js,ts,jsx,tsx}",
-```
+Here’s how you can get started using the **SchedulerProvider** and **SchedulerWrapper** components in your React project with minimal setup:
 
+```tsx
+"use client";
 
-## Demo
-![alt text](readme-assets/calendar-sc-1.png)
-![alt text](readme-assets/calendar-sc-2.png)
-![alt text](readme-assets/calendar-sc-3.png)
-![alt text](readme-assets/calendar-sc-4.png)
-![alt text](readme-assets/calendar-sc-5.png)
-![alt text](readme-assets/calendar-sc-6.png)
-![alt text](readme-assets/calendar-sc-1-light.png)
+import SchedulerWrapper from "@/components/schedule/_components/view/schedular-view-filteration";
+import { SchedulerProvider } from "@/providers/schedular-provider";
 
-
-
-
-
-
-## Usage
-
-### Scheduler Wrapper
-
-To use the scheduler in your project, call the `SchedulerView` inside a wrapper component:
-
-```javascript
-import React from "react";
-import SchedulerView from "../view/schedular-view";
-
-export default function SchedulerWrapper() {
+export default function Home() {
   return (
-    <div className="w-full">
-      <h1 className="tracking-tighter font-semibold text-8xl mb-10">
-        Event Schedule
-      </h1>
-      <SchedulerView />
-    </div>
+    <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <SchedulerProvider>
+        <SchedulerWrapper />
+      </SchedulerProvider>
+    </section>
   );
 }
 ```
 
-This wrapper ensures the **SchedulerView** is correctly rendered inside your component tree.
+## Customized Usage
 
----
+You can customize the calendar by passing custom views, buttons, and event modals using the `SchedulerWrapper` and `SchedulerProvider` props:
 
-## Views Explained
+```tsx
+"use client";
 
-The **Scheduler Library** provides multiple views to efficiently manage events across different time frames.
+import SchedulerWrapper from "@/components/schedule/_components/view/schedular-view-filteration";
+import { SchedulerProvider } from "@/providers/schedular-provider";
 
-### 1. **Daily View**
-Displays events for a specific day, broken down into hourly slots.
-
-```javascript
-import DailyView from './components/DailyView';
-
-function App() {
-  return <DailyView />;
-}
-```
-- **Usage**: Ideal for managing events that span hours.
-- **Feature**: Shows a timeline with adding event functionality.
-
-### 2. **Weekly View**
-Shows a week's worth of events, helping you get an overview of tasks across multiple days.
-
-```javascript
-import WeeklyView from './components/WeeklyView';
-
-function App() {
-  return <WeeklyView />;
-}
-```
-- **Usage**: Perfect for planning meetings and activities over several days.
-- **Feature**: Displays overlapping events side-by-side with dynamic widths.
-
-### 3. **Monthly View**
-Provides an overview of events for an entire month.
-
-```javascript
-import MonthView from './components/MonthView';
-
-function App() {
-  return <MonthView />;
-}
-```
-- **Usage**: Useful for scheduling long-term events or campaigns.
-- **Feature**: Supports compact event previews with a "Show More" option.
-
----
-
-## Context Provider Setup
-
-Wrap your application with the `SchedulerProvider` to manage event state and actions.
-
-### Example:
-
-```javascript
-import { SchedulerProvider } from './context/SchedulerContext';
-import SchedulerWrapper from './components/SchedulerWrapper';
-
-function App() {
+export default function Home() {
   return (
-    <SchedulerProvider>
-      <SchedulerWrapper />
-    </SchedulerProvider>
+    <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
+      <SchedulerProvider>
+        <SchedulerWrapper
+          classNames={{
+            buttons: {
+              addEvent: "bg-red-500",
+              next: "bg-blue-500",
+              prev: "bg-green-500",
+            },
+          }}
+          views={{ views: ["day", "month", "week"], mobileViews: ["day"] }}
+          CustomComponents={{
+            CustomEventModal: {
+              CustomAddEventModal: {
+                title: "Custom Add Event",
+                CustomForm: MyCustomForm,
+              },
+            },
+          }}
+        />
+      </SchedulerProvider>
+    </section>
   );
 }
+
+const MyCustomForm: React.FC<{ register: any; errors: any }> = ({
+  register,
+  errors,
+}) => (
+  <>
+    <input
+      {...register("title")}
+      placeholder="Custom Event Name"
+      className={`input ${errors.title ? "input-error" : ""}`}
+    />
+    {errors.title && (
+      <span className="error-message">{errors.title.message}</span>
+    )}
+
+    <textarea
+      {...register("description")}
+      placeholder="Custom Description"
+      className="textarea"
+    />
+
+    <input
+      {...register("startDate")}
+      type="date"
+      className={`input ${errors.startDate ? "input-error" : ""}`}
+    />
+
+    <input
+      {...register("endDate")}
+      type="date"
+      className={`input ${errors.endDate ? "input-error" : ""}`}
+    />
+
+    <button type="submit" className="btn">
+      Submit
+    </button>
+  </>
+);
 ```
 
----
+## API Documentation
 
-## Handlers Explained
+### SchedulerProvider
 
-Handlers define logic for managing event styling. This ensures that overlapping events display correctly and are positioned dynamically within the scheduler view.
+The `SchedulerProvider` component wraps the calendar and provides necessary context and state management for the events and calendar views.
 
-```javascript
-handlers.handleEventStyling(event, dayEvents);
+#### Props:
+- **onAddEvent** `(optional)`: `(event: Event) => void` – Callback triggered when an event is added.
+- **onUpdateEvent** `(optional)`: `(event: Event) => void` – Callback triggered when an event is updated.
+- **onDeleteEvent** `(optional)`: `(id: string) => void` – Callback triggered when an event is deleted.
+- **weekStartsOn** `(optional)`: `"sunday"` | `"monday"` – Specifies the starting day of the week. Defaults to `"sunday"`.
+- **children**: `ReactNode` – The children components to render within the provider.
+
+### SchedulerWrapper
+
+This component is the main calendar view. It supports day, week, and month views, as well as custom components for event modals and buttons.
+
+#### Props:
+- **views** `(optional)`: `Views` – Specify which views (day, week, month) are available and which are shown on mobile.
+  - **views**: `("day" | "week" | "month")[]` – The available views for desktop.
+  - **mobileViews**: `("day" | "week" | "month")[]` – The available views for mobile devices.
+
+- **CustomComponents** `(optional)`: `CustomComponents` – Customize components such as event modals, buttons, and tabs.
+  - **CustomEventModal**: Customize event modals, such as the Add Event form.
+  - **customTabs**: Customize the tabs for Day, Week, and Month.
+  
+- **classNames** `(optional)`: `ClassNames` – Customize the styling of buttons, tabs, and other elements.
+
+### useScheduler
+
+A custom hook that provides access to the `SchedulerContext`, including state, getters, and handlers.
+
+```tsx
+const { state, dispatch, getters, handlers } = useScheduler();
 ```
 
-### Breakdown:
-- **`handleEventStyling(event, dayEvents)`**: 
-  - **Calculates**: Top position and height for each event.
-  - **Adjusts**: The event's position if it overlaps with others.
-  - **Returns**:  
-    - `height`: Event height based on duration.  
-    - `top`: Vertical offset for event positioning.  
-    - `left`: Horizontal position for overlapping events.  
-    - `zIndex`: Stacking order of events.  
-    - `maxWidth`, `minWidth`: Widths for overlapping events.
+### Event Schema and Form Data
 
----
+The library uses **Zod** for form validation, and **React Hook Form** for handling form data. Here's the event schema and how it's used in the form.
 
-## Getters Explained
+#### Event Schema (Zod)
 
-Getters provide utility methods to retrieve and manipulate scheduling data.
+The `eventSchema` defines the structure and validation rules for event forms using **Zod**.
 
-### List of Getters:
-
-1. **`getDaysInMonth(month, year)`**:  
-   - Returns an array of days in a month, each with its corresponding events.
-   ```javascript
-   const days = getters.getDaysInMonth(9, 2024);
-   ```
-
-2. **`getEventsForDay(day, currentDate)`**:  
-   - Retrieves the list of events for a specific day.
-   ```javascript
-   const events = getters.getEventsForDay(12, new Date());
-   ```
-
-3. **`getDaysInWeek(week, year)`**:  
-   - Provides an array of `Date` objects for a given week.
-   ```javascript
-   const weekDays = getters.getDaysInWeek(42, 2024);
-   ```
-
-4. **`getWeekNumber(date)`**:  
-   - Calculates the week number for a specific date.
-   ```javascript
-   const weekNumber = getters.getWeekNumber(new Date());
-   ```
-
-5. **`getDayName(day)`**:  
-   - Returns the name of the day (e.g., "Mon").
-   ```javascript
-   const dayName = getters.getDayName(1); // Output: "Mon"
-   ```
-
----
-
-## Custom Modals and Styling
-
-The library integrates with `@nextui-org` for modals and supports event management through user interactions.
-
-### Example Modal Usage:
-
-```javascript
-showModal({
-  title: "Add Event",
-  body: <AddEventModal />,
-  getter: async () => ({
-    startDate: new Date(),
-    endDate: new Date(Date.now() + 60 * 60 * 1000), // 1 hour later
-  }),
+```ts
+export const eventSchema = z.object({
+  title: z.string().nonempty("Event name is required"),
+  description: z.string().optional(),
+  startDate: z.date(),
+  endDate: z.date(),
+  variant: z.enum(["primary", "danger", "success", "warning", "default"]),
+  color: z.string().nonempty("Color selection is required"),
 });
 ```
 
----
+#### EventFormData
 
-## Contributing
+The form data is handled through the `EventFormData` interface, which corresponds to the schema's structure.
 
-We are actively seeking contributors to improve the **Our Scheduler Library**! If you'd like to contribute:
-1. Fork the repository.
-2. Create a new branch for your feature.
-3. Submit a pull request for review.
+```ts
+export type EventFormData = z.infer<typeof eventSchema>;
+```
 
-We appreciate all contributions, whether you're fixing bugs, enhancing documentation, or introducing new features!
+### SelectDate Component
 
----
+The `SelectDate` component helps with selecting a date range and times for an event.
+
+#### Props:
+- **data** `(optional)`: `{ startDate: Date; endDate: Date; time: Time }` – The initial data for start and end dates and times.
+- **setValue**: `UseFormSetValue<EventFormData>` – Function from React Hook Form to set form values.
+
+#### Example of Usage:
+
+```tsx
+import { UseFormSetValue } from "react-hook-form";
+import SelectDate from "@/components/schedule/_components/add-event-components/select-date";
+
+<SelectDate data={data} setValue={setValue} />
+```
+
+### Types and Interfaces
+
+#### Event
+
+Represents an individual event on the calendar.
+
+```ts
+export interface Event {
+  id: string;
+  title: string;
+  description?: string;
+  startDate: Date;
+  endDate: Date;
+  variant?: Variant;
+}
+```
+
+#### Variant
+
+Defines the style variant of an event, which can be one of the following:
+- `"success"`
+- `"primary"`
+- `"default"`
+- `"warning"`
+- `"danger"`
+
+#### Views
+
+Defines the available views for mobile and desktop.
+
+```ts
+export type Views = {
+  mobileViews?: string[];
+  views?: string[];
+};
+```
+
+#### startOfWeek
+
+Specifies the starting day of the week, either `"sunday"` or `"monday"`.
+
+```ts
+export type startOfWeek = "sunday" | "monday";
+```
+
+#### CustomEventModal
+
+Represents customization options for the event modal, including the form and title.
+
+```ts
+export interface CustomEventModal {
+  CustomAddEventModal?: {
+    title?: string;
+    CustomForm?: React.FC<{ register: any; errors: any }>;
+  };
+}
+```
+
+#### CustomComponents
+
+Defines customizable components such as buttons, tabs, and event modals.
+
+```ts
+export interface CustomComponents {
+  customButtons?: {
+    CustomAddEventButton?: React.ReactNode;
+    CustomPrevButton?: React.ReactNode;
+    CustomNextButton?: React.ReactNode;
+  };
+
+  customTabs?: {
+    CustomDayTab?: React.ReactNode;
+    CustomWeekTab?: React.ReactNode;
+    CustomMonthTab?: React.ReactNode;
+  };
+  CustomEventComponent?: React.FC<Event>; // Using custom event type
+  CustomEventModal?: CustomEventModal;
+}
+```
+
+#### ClassNames
+
+Groups class names for buttons, tabs, and views.
+
+```ts
+export interface ClassNames {
+  event?: string;
+  buttons?: ButtonClassNames;
+  tabs?: TabsClassNames;
+  views?: ViewClassNames;
+}
+```
+
+#### ButtonClassNames
+
+Specifies class names for previous, next, and add event buttons.
+
+```ts
+export interface ButtonClassNames {
+ 
+
+ prev?: string;
+  next?: string;
+  addEvent?: string;
+}
+```
+
+#### TabsClassNames
+
+Specifies class names for various parts of the tab interface.
+
+```ts
+export interface TabsClassNames {
+  cursor?: string;
+  panel?: string;
+  tab?: string;
+  tabContent?: string;
+  tabList?: string;
+  wrapper?: string;
+}
+```
+
+#### ViewClassNames
+
+Specifies class names for day, week, and month views.
+
+```ts
+export interface ViewClassNames {
+  dayView?: string;
+  weekView?: string;
+  monthView?: string;
+}
+```
 
 ## License
 
-This project is licensed under the MIT License.
+This library is licensed under the MIT License.
 
 ---
 

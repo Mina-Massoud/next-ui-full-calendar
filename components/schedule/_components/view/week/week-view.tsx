@@ -10,6 +10,7 @@ import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-
 import { Button } from "@nextui-org/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
+import { CustomEventModal } from "@/types/schedular-viewer";
 
 const hours = Array.from(
   { length: 24 },
@@ -73,7 +74,19 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-export default function WeeklyView() {
+export default function WeeklyView({
+  prevButton,
+  nextButton,
+  CustomEventComponent,
+  CustomEventModal,
+  classNames,
+}: {
+  prevButton?: React.ReactNode;
+  nextButton?: React.ReactNode;
+  CustomEventComponent?: React.FC<Event>;
+  CustomEventModal?: CustomEventModal;
+  classNames?: { prev?: string; next?: string; addEvent?: string };
+}) {
   const { getters, handlers } = useScheduler();
   const hoursColumnRef = useRef<HTMLDivElement>(null);
   const [detailedHour, setDetailedHour] = useState<string | null>(null);
@@ -165,7 +178,7 @@ export default function WeeklyView() {
         initial="hidden"
         animate="visible"
       >
-        {chipData.map((chip) => (
+        {/* {chipData.map((chip) => (
           <motion.div key={chip.id} variants={itemVariants}>
             <Chip
               color={chip.color}
@@ -178,17 +191,32 @@ export default function WeeklyView() {
               <div className="description">{chip.description}</div>
             </Chip>
           </motion.div>
-        ))}
+        ))} */}
       </motion.div>
 
       <div className="flex ml-auto gap-3">
-        <Button startContent={<ArrowLeft />} onClick={handlePrevWeek}>
-          Previous
-        </Button>
-
-        <Button startContent={<ArrowRight />} onClick={handleNextWeek}>
-          Next
-        </Button>
+        {prevButton ? (
+          <div onClick={handlePrevWeek}>{prevButton}</div>
+        ) : (
+          <Button
+            className={classNames?.prev}
+            startContent={<ArrowLeft />}
+            onClick={handlePrevWeek}
+          >
+            Prev
+          </Button>
+        )}
+        {nextButton ? (
+          <div onClick={handleNextWeek}>{nextButton}</div>
+        ) : (
+          <Button
+            className={classNames?.next}
+            onClick={handleNextWeek}
+            endContent={<ArrowRight />}
+          >
+            Next
+          </Button>
+        )}
       </div>
       <div
         key={currentDate.toDateString()}
@@ -289,7 +317,14 @@ export default function WeeklyView() {
                         }}
                         className="flex flex-grow flex-col z-50 absolute"
                       >
-                        <EventStyled minmized {...event} />
+                        <EventStyled
+                          event={{
+                            ...event,
+                            CustomEventComponent,
+                            minmized: true,
+                          }}
+                          CustomEventModal={CustomEventModal}
+                        />
                       </div>
                     );
                   })}

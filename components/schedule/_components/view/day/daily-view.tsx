@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -10,6 +10,7 @@ import { Event, useScheduler } from "@/providers/schedular-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
+import { CustomEventModal } from "@/types/schedular-viewer";
 
 const hours = Array.from(
   { length: 24 },
@@ -32,7 +33,19 @@ const itemVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
-export default function DailyView() {
+export default function DailyView({
+  prevButton,
+  nextButton,
+  CustomEventComponent,
+  CustomEventModal,
+  classNames,
+}: {
+  prevButton?: React.ReactNode;
+  nextButton?: React.ReactNode;
+  CustomEventComponent?: React.FC<Event>;
+  CustomEventModal?: CustomEventModal;
+  classNames?: { prev?: string; next?: string; addEvent?: string };
+}) {
   const hoursColumnRef = useRef<HTMLDivElement>(null);
   const [detailedHour, setDetailedHour] = useState<string | null>(null);
   const [timelinePosition, setTimelinePosition] = useState<number>(0);
@@ -63,8 +76,14 @@ export default function DailyView() {
 
   function handleAddEvent(event?: Event) {
     showModal({
-      title: "Add Event",
-      body: <AddEventModal />,
+      title: CustomEventModal?.CustomAddEventModal?.title || "Add Event",
+      body: (
+        <AddEventModal
+          CustomAddEventModal={
+            CustomEventModal?.CustomAddEventModal?.CustomForm
+          }
+        />
+      ),
       getter: async () => {
         const startDate = event?.startDate || new Date();
         const endDate = event?.endDate || new Date();
@@ -105,13 +124,13 @@ export default function DailyView() {
     });
   }
 
-  const handleNextWeek = () => {
+  const handleNextDay = () => {
     const nextDay = new Date(currentDate);
     nextDay.setDate(currentDate.getDate() + 1);
     setCurrentDate(nextDay);
   };
 
-  const handlePrevWeek = () => {
+  const handlePrevDay = () => {
     const prevDay = new Date(currentDate);
     prevDay.setDate(currentDate.getDate() - 1);
     setCurrentDate(prevDay);
@@ -119,35 +138,54 @@ export default function DailyView() {
 
   return (
     <div className="p-4">
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-3 flex-wrap mb-5">
         <h1 className="text-3xl font-semibold mb-4">
           {getFormattedDayTitle()}
         </h1>
 
         <div className="flex ml-auto gap-3">
-          <Button startContent={<ArrowLeft />} onClick={handlePrevWeek}>
-            Previous
-          </Button>
-
-          <Button startContent={<ArrowRight />} onClick={handleNextWeek}>
-            Next
-          </Button>
+          {prevButton ? (
+            <div onClick={handlePrevDay}>{prevButton}</div>
+          ) : (
+            <Button
+              className={classNames?.prev}
+              startContent={<ArrowLeft />}
+              onClick={handlePrevDay}
+            >
+              Prev
+            </Button>
+          )}
+          {nextButton ? (
+            <div onClick={handleNextDay}>{nextButton}</div>
+          ) : (
+            <Button
+              className={classNames?.next}
+              onClick={handleNextDay}
+              endContent={<ArrowRight />}
+            >
+              Next
+            </Button>
+          )}
         </div>
       </div>
       <div className="flex flex-col gap-4">
         <div className="all-day-events">
-          <Chip
-            color="warning"
-            className="min-w-full p-4 min-h-fit rounded-lg"
-            variant="flat"
-          >
-            <div className="title">
-              <span className="text-sm">Ads Campaign Nr2</span>
-            </div>
-            <div className="description">
-              All Day Day 2 of 5 AdSense + FB, Target Audience: SMB2-Delta3
-            </div>
-          </Chip>
+          {dayEvents && dayEvents?.length
+            ? dayEvents?.map((event, eventIndex) => {
+                return (
+                  <div key={`event-${event.id}-${eventIndex}`}>
+                    <EventStyled
+                      event={{
+                        ...event,
+                        CustomEventComponent,
+                        minmized: false,
+                      }}
+                      CustomEventModal={CustomEventModal}
+                    />
+                  </div>
+                );
+              })
+            : "No events for today"}
         </div>
 
         <div className="relative rounded-md bg-default-50 hover:bg-default-100 transition duration-400">
@@ -201,7 +239,14 @@ export default function DailyView() {
                         }}
                         className="flex flex-grow flex-col z-50 absolute"
                       >
-                        <EventStyled minmized {...event} />
+                        <EventStyled
+                          event={{
+                            ...event,
+                            CustomEventComponent,
+                            minmized: true,
+                          }}
+                          CustomEventModal={CustomEventModal}
+                        />
                       </div>
                     );
                   })

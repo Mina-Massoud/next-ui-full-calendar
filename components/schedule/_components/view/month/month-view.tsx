@@ -13,7 +13,20 @@ import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
 import EventStyled from "../event-component/event-styled";
-export default function MonthView() {
+import { CustomEventModal } from "@/types/schedular-viewer";
+export default function MonthView({
+  prevButton,
+  nextButton,
+  CustomEventComponent,
+  CustomEventModal,
+  classNames,
+}: {
+  prevButton?: React.ReactNode;
+  nextButton?: React.ReactNode;
+  CustomEventComponent?: React.FC<Event>;
+  CustomEventModal?: CustomEventModal;
+  classNames?: { prev?: string; next?: string; addEvent?: string };
+}) {
   const daysOfWeek = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
   const { getters, state } = useScheduler();
   const { showModal } = useModalContext();
@@ -103,6 +116,15 @@ export default function MonthView() {
     console.log("Updated state:", state);
   }, [state]);
 
+  console.log(
+    new Date().getDate() ===
+      new Date(
+        currentDate.getFullYear(), // Use the current year
+        currentDate.getMonth(), // Use the current month
+        17 // Pass the day directly
+      ).getDate()
+  );
+
   return (
     <div>
       <div className="flex flex-col mb-4">
@@ -118,13 +140,28 @@ export default function MonthView() {
           {currentDate.getFullYear()}
         </motion.h2>
         <div className="flex gap-3">
-          <Button startContent={<ArrowLeft />} onClick={handlePrevMonth}>
-            Previous
-          </Button>
-
-          <Button startContent={<ArrowRight />} onClick={handleNextMonth}>
-            Next
-          </Button>
+          {prevButton ? (
+            <div onClick={handlePrevMonth}>{prevButton}</div>
+          ) : (
+            <Button
+              className={classNames?.prev}
+              startContent={<ArrowLeft />}
+              onClick={handlePrevMonth}
+            >
+              Prev
+            </Button>
+          )}
+          {nextButton ? (
+            <div onClick={handleNextMonth}>{nextButton}</div>
+          ) : (
+            <Button
+              className={classNames?.next}
+              onClick={handleNextMonth}
+              endContent={<ArrowRight />}
+            >
+              Next
+            </Button>
+          )}
         </div>
       </div>
       <AnimatePresence mode="wait">
@@ -160,17 +197,30 @@ export default function MonthView() {
                 >
                   <div
                     className={clsx(
-                      "font-semibold text-3xl mb-1",
+                      "font-semibold relative text-3xl mb-1",
                       dayEvents.length > 0
                         ? "text-primary-600"
-                        : "text-muted-foreground"
+                        : "text-muted-foreground",
+                      // Check if the current day, month, and year match
+                      new Date().getDate() === dayObj.day &&
+                        new Date().getMonth() === currentDate.getMonth() &&
+                        new Date().getFullYear() === currentDate.getFullYear()
+                        ? "text-secondary-500"
+                        : ""
                     )}
                   >
                     {dayObj.day}
                   </div>
                   <div className="flex-grow flex flex-col gap-2  w-full overflow-hidden">
                     {dayEvents?.length > 0 && (
-                      <EventStyled minmized {...dayEvents[0]} />
+                      <EventStyled
+                        event={{
+                          ...dayEvents[0],
+                          CustomEventComponent,
+                          minmized: true,
+                        }}
+                        CustomEventModal={CustomEventModal}
+                      />
                     )}
                     {dayEvents.length > 1 && (
                       <Chip
