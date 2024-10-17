@@ -7,24 +7,7 @@ export default function Home() {
   return (
     <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
       <SchedulerProvider>
-        <SchedulerWrapper
-          classNames={{
-            buttons: {
-              addEvent: "bg-red-500",
-              next: "bg-blue-500",
-              prev: "bg-green-500",
-            },
-          }}
-          views={{ views: ["day", "month", "week"], mobileViews: ["day"] }}
-          CustomComponents={{
-            CustomEventModal: {
-              CustomAddEventModal: {
-                title: "Custom Add Event",
-                CustomForm: MyCustomForm,
-              },
-            },
-          }}
-        />
+        <SchedulerWrapper />
       </SchedulerProvider>
     </section>
   );
