@@ -1,6 +1,11 @@
+🚧 **Beta Version** 🚧
+
+This package is currently in **beta** and may contain bugs or incomplete features. Please use it with caution and feel free to contribute or report any issues.
+
+
 # Scheduler Library for React
 
-Welcome to the **Scheduler Library**! This React-based scheduling library helps you manage events across daily, weekly, and monthly views with customizable modals and smooth animations.
+Welcome to the **Mina Calendar**! This React-based scheduling library helps you manage events across daily, weekly, and monthly views with customizable modals and smooth animations.
 
 ## Table of Contents
 - [Features](#features)
@@ -37,7 +42,14 @@ git clone https://github.com/Mina-Massoud/next-ui-full-calendar.git
 npm install
 ```
 
----
+### TailwindCSS Configuration
+
+If you installed the package via ```npm i mina-calendar``` To ensure the styles work correctly, you need to add the following line to the `content` section of your `tailwind.config.js`:
+
+```js
+"./node_modules/mina-calendar/dist/**/*.{js,ts,jsx,tsx}",
+```
+
 
 ## Demo
 ![alt text](readme-assets/calendar-sc-1.png)
