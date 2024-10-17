@@ -28,7 +28,8 @@ Welcome to the **Scheduler Library**! This React-based scheduling library helps 
 ---
 
 ## Installation
-
+> **Note:** This library requires a <span style="color:yellow;">NextUI</span> project to work.
+> ### Coming Soon: <span style="color:yellow;">ShadCN UI</span> Support
 To get started, clone the repository from GitHub:
 
 ```bash
