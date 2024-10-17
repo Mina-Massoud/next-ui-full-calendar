@@ -12,6 +12,20 @@ Welcome to the **Mina Scheduler Library**, a customizable and flexible calendar 
 - **Zod Validation:** Schema validation for ensuring valid event data.
 - **Next UI Integration:** Leverages Next UI for a seamless user interface.
 
+
+## Demo
+### Live Demo : https://mina-scheduler.vercel.app/
+
+![alt text](readme-assets/calendar-sc-1.png)
+![alt text](readme-assets/calendar-sc-2.png)
+![alt text](readme-assets/calendar-sc-3.png)
+![alt text](readme-assets/calendar-sc-4.png)
+![alt text](readme-assets/calendar-sc-5.png)
+![alt text](readme-assets/calendar-sc-6.png)
+![alt text](readme-assets/calendar-sc-1-light.png)
+
+
+
 ## Installation
 
 To install the library, run:
