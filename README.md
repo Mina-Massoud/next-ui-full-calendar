@@ -23,6 +23,17 @@ npm install mina-scheduler
 ### Note:
 Since this library is built using **Next UI** components, it's recommended to use it within a **Next UI** project to maintain the same UI experience.
 
+### Pre-Styled
+To include the styles from the `mina-scheduler` package in your Tailwind CSS setup, add the following line to the `content` array in your `tailwind.config.js`:
+
+```javascript
+content: [
+    "./node_modules/mina-scheduler/**/*.{js,ts,jsx,tsx}",
+    // other paths...
+],
+```
+This line ensures that Tailwind scans all JavaScript and TypeScript files in the `mina-scheduler` package for class names. Make sure to include any other relevant paths in the `content` array as needed.
+
 ## Basic Usage
 
 Here’s how you can get started using the **SchedulerProvider** and **SchedulerWrapper** components in your React project with minimal setup:
