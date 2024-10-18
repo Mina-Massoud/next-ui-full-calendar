@@ -50,19 +50,19 @@ This line ensures that Tailwind scans all JavaScript and TypeScript files in the
 
 ## Basic Usage
 
-Here’s how you can get started using the **SchedulerProvider** and **SchedulerWrapper** components in your React project with minimal setup:
+Here’s how you can get started using the **SchedulerProvider** and **SchedularView** components in your React project with minimal setup:
 
 ```tsx
 "use client";
 
-import SchedulerWrapper from "@/components/schedule/_components/view/schedular-view-filteration";
-import { SchedulerProvider } from "@/providers/schedular-provider";
+import { SchedulerProvider, SchedularView } from "mina-scheduler";
+
 
 export default function Home() {
   return (
     <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
       <SchedulerProvider>
-        <SchedulerWrapper />
+        <SchedularView />
       </SchedulerProvider>
     </section>
   );
@@ -71,19 +71,19 @@ export default function Home() {
 
 ## Customized Usage
 
-You can customize the calendar by passing custom views, buttons, and event modals using the `SchedulerWrapper` and `SchedulerProvider` props:
+You can customize the calendar by passing custom views, buttons, and event modals using the `SchedularView` and `SchedulerProvider` props:
 
 ```tsx
 "use client";
 
-import SchedulerWrapper from "@/components/schedule/_components/view/schedular-view-filteration";
-import { SchedulerProvider } from "@/providers/schedular-provider";
+import { SchedulerProvider, SchedularView } from "mina-scheduler";
+
 
 export default function Home() {
   return (
     <section className="flex w-full flex-col items-center justify-center gap-4 py-8 md:py-10">
       <SchedulerProvider>
-        <SchedulerWrapper
+        <SchedularView
           classNames={{
             buttons: {
               addEvent: "bg-red-500",
@@ -158,7 +158,7 @@ The `SchedulerProvider` component wraps the calendar and provides necessary cont
 - **weekStartsOn** `(optional)`: `"sunday"` | `"monday"` – Specifies the starting day of the week. Defaults to `"sunday"`.
 - **children**: `ReactNode` – The children components to render within the provider.
 
-### SchedulerWrapper
+### SchedularView
 
 This component is the main calendar view. It supports day, week, and month views, as well as custom components for event modals and buttons.
 
