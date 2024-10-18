@@ -112,18 +112,6 @@ export default function MonthView({
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
-  useEffect(() => {
-    console.log("Updated state:", state);
-  }, [state]);
-
-  console.log(
-    new Date().getDate() ===
-      new Date(
-        currentDate.getFullYear(), // Use the current year
-        currentDate.getMonth(), // Use the current month
-        17 // Pass the day directly
-      ).getDate()
-  );
 
   return (
     <div>

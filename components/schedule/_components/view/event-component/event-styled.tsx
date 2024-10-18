@@ -34,7 +34,7 @@ export default function EventStyled({
 
   // Handler function
   function handleEditEvent(event: Event) {
-    console.log("Edit event", event);
+    // console.log("Edit event", event);
 
     showEventModal({
       title: event?.title,

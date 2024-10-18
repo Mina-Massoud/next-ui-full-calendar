@@ -631,8 +631,10 @@ var SchedulerProvider = function(param) {
         var maxHeight = 0;
         var eventTop = 0;
         if (_instanceof(event.startDate, Date) && _instanceof(event.endDate, Date)) {
-            var diffInMs = event.endDate.getTime() - event.startDate.getTime();
-            eventHeight = diffInMs / (1e3 * 60 * 60) * 64;
+            var startTime = event.startDate.getHours() * 60 + event.startDate.getMinutes();
+            var endTime = event.endDate.getHours() * 60 + event.endDate.getMinutes();
+            var diffInMinutes = endTime - startTime;
+            eventHeight = diffInMinutes / 60 * 64;
             var eventStartHour = event.startDate.getHours() + event.startDate.getMinutes() / 60;
             var dayEndHour = 24;
             maxHeight = Math.max(0, (dayEndHour - eventStartHour) * 64);
@@ -1045,7 +1047,6 @@ function EventStyled(param) {
     var _useModalContext = useModalContext(), showEventModal = _useModalContext.showModal;
     function handleEditEvent(event2) {
         var _CustomEventModal_CustomAddEventModal;
-        console.log("Edit event", event2);
         showEventModal({
             title: event2 === null || event2 === void 0 ? void 0 : event2.title,
             body: /* @__PURE__ */ import_react5.default.createElement(AddEventModal, {
@@ -1074,7 +1075,7 @@ function EventStyled(param) {
             });
         },
         key: event === null || event === void 0 ? void 0 : event.id,
-        className: "w-full use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
+        className: "w-full  use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
     }, event.CustomEventComponent ? /* @__PURE__ */ import_react5.default.createElement(event.CustomEventComponent, _object_spread({}, event)) : /* @__PURE__ */ import_react5.default.createElement(import_chip.Chip, {
         variant: "flat",
         color: event === null || event === void 0 ? void 0 : event.variant,
@@ -1284,7 +1285,7 @@ function DailyView(param) {
                 maxWidth: maxWidth,
                 minWidth: minWidth
             },
-            className: "flex flex-grow flex-col z-50 absolute"
+            className: "flex transition-all duration-1000 flex-grow flex-col z-50 absolute"
         }, /* @__PURE__ */ import_react6.default.createElement(EventStyled, {
             event: _object_spread_props(_object_spread({}, event), {
                 CustomEventComponent: CustomEventComponent,
@@ -1411,14 +1412,6 @@ function MonthView(param) {
             }
         }
     };
-    (0, import_react8.useEffect)(function() {
-        console.log("Updated state:", state);
-    }, [
-        state
-    ]);
-    console.log(/* @__PURE__ */ new Date().getDate() === new Date(currentDate.getFullYear(), // Use the current year
-    currentDate.getMonth(), // Use the current month
-    17).getDate());
     return /* @__PURE__ */ import_react8.default.createElement("div", null, /* @__PURE__ */ import_react8.default.createElement("div", {
         className: "flex flex-col mb-4"
     }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion2.motion.h2, {
@@ -1640,7 +1633,7 @@ function WeeklyView(param) {
         }, /* @__PURE__ */ import_react9.default.createElement("div", {
             className: "text-lg font-semibold"
         }, getters.getDayName(day.getDay())), /* @__PURE__ */ import_react9.default.createElement("div", {
-            className: (0, import_clsx2.default)("text-lg font-semibold", day.getDate() === /* @__PURE__ */ new Date().getDate() && "bg-primary text-primary-foreground rounded-full")
+            className: (0, import_clsx2.default)("text-lg font-semibold", /* @__PURE__ */ new Date().getDate() === day.getDate() && /* @__PURE__ */ new Date().getMonth() === currentDate.getMonth() && /* @__PURE__ */ new Date().getFullYear() === currentDate.getFullYear() ? "text-secondary-500" : "")
         }, day.getDate()))), /* @__PURE__ */ import_react9.default.createElement("div", {
             className: "absolute top-12 right-0 w-px h-[calc(100%-3rem)]"
         }));
@@ -1685,12 +1678,13 @@ function WeeklyView(param) {
                 key: "event-".concat(event.id, "-").concat(eventIndex),
                 style: {
                     minHeight: height,
+                    height: height,
                     top: top,
                     left: left,
                     maxWidth: maxWidth,
                     minWidth: minWidth
                 },
-                className: "flex flex-grow flex-col z-50 absolute"
+                className: "flex transitio transition-all duration-1000 flex-grow flex-col z-50 absolute"
             }, /* @__PURE__ */ import_react9.default.createElement(EventStyled, {
                 event: _object_spread_props(_object_spread({}, event), {
                     CustomEventComponent: CustomEventComponent,

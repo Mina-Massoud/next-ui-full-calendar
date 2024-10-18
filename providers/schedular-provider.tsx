@@ -427,7 +427,7 @@ export const SchedulerProvider = ({
 
       // Calculate the event height based on the duration (64px per hour, so 64px/60min = 1.0667px per minute)
       eventHeight = (diffInMinutes / 60) * 64;
-      console.log("eventHeight", eventHeight);
+      // console.log("eventHeight", eventHeight);
 
       // Get the event start hour as a fraction (e.g., 13.5 for 13:30)
       const eventStartHour =
