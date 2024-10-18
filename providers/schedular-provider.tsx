@@ -416,10 +416,18 @@ export const SchedulerProvider = ({
     let eventTop = 0;
 
     if (event.startDate instanceof Date && event.endDate instanceof Date) {
-      const diffInMs = event.endDate.getTime() - event.startDate.getTime();
+      // Normalize start and end dates to only include hours and minutes
+      const startTime =
+        event.startDate.getHours() * 60 + event.startDate.getMinutes(); // Convert to minutes
+      const endTime =
+        event.endDate.getHours() * 60 + event.endDate.getMinutes(); // Convert to minutes
 
-      // Calculate the event height based on duration (64px per hour)
-      eventHeight = (diffInMs / (1000 * 60 * 60)) * 64;
+      // Calculate the difference in minutes between start and end times
+      const diffInMinutes = endTime - startTime;
+
+      // Calculate the event height based on the duration (64px per hour, so 64px/60min = 1.0667px per minute)
+      eventHeight = (diffInMinutes / 60) * 64;
+      console.log("eventHeight", eventHeight);
 
       // Get the event start hour as a fraction (e.g., 13.5 for 13:30)
       const eventStartHour =

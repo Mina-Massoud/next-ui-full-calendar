@@ -65,7 +65,7 @@ export default function EventStyled({
         });
       }}
       key={event?.id}
-      className="w-full use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
+      className="w-full  use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
     >
       {event.CustomEventComponent ? (
         <event.CustomEventComponent {...event} />

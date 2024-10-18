@@ -237,7 +237,7 @@ export default function DailyView({
                           maxWidth: maxWidth,
                           minWidth: minWidth,
                         }}
-                        className="flex flex-grow flex-col z-50 absolute"
+                        className="flex transition-all duration-1000 flex-grow flex-col z-50 absolute"
                       >
                         <EventStyled
                           event={{

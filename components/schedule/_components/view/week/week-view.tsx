@@ -240,8 +240,11 @@ export default function WeeklyView({
                     <div
                       className={clsx(
                         "text-lg font-semibold",
-                        day.getDate() === new Date().getDate() &&
-                          "bg-primary text-primary-foreground rounded-full"
+                        new Date().getDate() === day.getDate() &&
+                          new Date().getMonth() === currentDate.getMonth() &&
+                          new Date().getFullYear() === currentDate.getFullYear()
+                          ? "text-secondary-500"
+                          : ""
                       )}
                     >
                       {day.getDate()}
@@ -310,12 +313,13 @@ export default function WeeklyView({
                         key={`event-${event.id}-${eventIndex}`}
                         style={{
                           minHeight: height,
+                          height,
                           top: top,
                           left: left,
                           maxWidth: maxWidth,
                           minWidth: minWidth,
                         }}
-                        className="flex flex-grow flex-col z-50 absolute"
+                        className="flex transitio transition-all duration-1000 flex-grow flex-col z-50 absolute"
                       >
                         <EventStyled
                           event={{
