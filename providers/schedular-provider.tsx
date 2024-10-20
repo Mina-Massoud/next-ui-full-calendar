@@ -10,16 +10,13 @@ import React, {
 } from "react";
 import { z } from "zod";
 import { ModalProvider } from "./modal-provider";
-import { Action, Event, Getters, Handlers, SchedulerContextType, startOfWeek } from "@/types";
+import { Action, Event, Getters, Handlers, SchedulerContextType, startOfWeek } from "@/types/index";
 // Define event and state types
 
 
 interface SchedulerState {
   events: Event[];
 }
-
-
-
 
 // Define the variant options
 export const variants = [
