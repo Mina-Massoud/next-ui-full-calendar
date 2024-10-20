@@ -6,11 +6,11 @@ import { Button } from "@nextui-org/button";
 import { Chip } from "@nextui-org/chip";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/schedular-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { CustomEventModal, Event } from "@/types";
 
 const hours = Array.from(
   { length: 24 },

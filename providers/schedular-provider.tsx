@@ -10,65 +10,16 @@ import React, {
 } from "react";
 import { z } from "zod";
 import { ModalProvider } from "./modal-provider";
-import { startOfWeek } from "@/types/schedular-viewer";
-
+import { Action, Event, Getters, Handlers, SchedulerContextType, startOfWeek } from "@/types";
 // Define event and state types
-export interface Event {
-  id: string;
-  title: string;
-  description?: string;
-  startDate: Date;
-  endDate: Date;
-  variant?: Variant;
-}
+
 
 interface SchedulerState {
   events: Event[];
 }
 
-// Define actions for reducer
-type Action =
-  | { type: "ADD_EVENT"; payload: Event }
-  | { type: "REMOVE_EVENT"; payload: { id: string } }
-  | { type: "UPDATE_EVENT"; payload: Event };
 
-// Define handlers interface
-interface Handlers {
-  handleEventStyling: (
-    event: Event,
-    dayEvents: Event[]
-  ) => {
-    height: string;
-    left: string;
-    maxWidth: string;
-    minWidth: string;
-    top: string;
-    zIndex: number;
-  };
-  handleAddEvent: (event: Event) => void;
-  handleUpdateEvent: (event: Event, id: string) => void;
-  handleDeleteEvent: (id: string) => void;
-}
 
-// Define getters interface
-interface Getters {
-  getDaysInMonth: (
-    month: number,
-    year: number
-  ) => { day: number; events: Event[] }[];
-  getEventsForDay: (day: number, currentDate: Date) => Event[];
-  getDaysInWeek: (week: number, year: number) => Date[];
-  getWeekNumber: (date: Date) => number;
-  getDayName: (day: number) => string;
-}
-
-// Define the context value interface
-interface SchedulerContextType {
-  state: SchedulerState;
-  dispatch: Dispatch<Action>;
-  getters: Getters;
-  handlers: Handlers;
-}
 
 // Define the variant options
 export const variants = [
@@ -79,19 +30,7 @@ export const variants = [
   "danger",
 ] as const;
 
-export type Variant = (typeof variants)[number];
 
-// Define Zod schema for form validation
-export const eventSchema = z.object({
-  title: z.string().nonempty("Event name is required"),
-  description: z.string().optional(),
-  startDate: z.date(),
-  endDate: z.date(),
-  variant: z.enum(["primary", "danger", "success", "warning", "default"]),
-  color: z.string().nonempty("Color selection is required"),
-});
-
-export type EventFormData = z.infer<typeof eventSchema>;
 
 // Initial state
 const initialState: SchedulerState = {
@@ -487,7 +426,9 @@ export const SchedulerProvider = ({
   };
 
   return (
-    <SchedulerContext.Provider value={{ state, dispatch, getters, handlers }}>
+    <SchedulerContext.Provider
+      value={{ events: state, dispatch, getters, handlers }}
+    >
       <ModalProvider>{children}</ModalProvider>
     </SchedulerContext.Provider>
   );

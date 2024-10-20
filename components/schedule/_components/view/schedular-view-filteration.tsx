@@ -12,12 +12,7 @@ import DailyView from "./day/daily-view";
 import MonthView from "./month/month-view";
 import WeeklyView from "./week/week-view";
 import { useModalContext } from "@/providers/modal-provider";
-import {
-  ClassNames,
-  CustomComponents,
-  startOfWeek,
-  Views,
-} from "@/types/schedular-viewer";
+import { ClassNames, CustomComponents, Views } from "@/types/index";
 
 // Animation settings for Framer Motion
 const animationConfig = {

@@ -34,6 +34,9 @@ To install the library, run:
 npm install mina-scheduler
 ```
 
+## Github Repo
+https://github.com/Mina-Massoud/next-ui-full-calendar
+
 ### Note:
 Since this library is built using **Next UI** components, it's recommended to use it within a **Next UI** project to maintain the same UI experience.
 
@@ -175,10 +178,115 @@ This component is the main calendar view. It supports day, week, and month views
 
 ### useScheduler
 
-A custom hook that provides access to the `SchedulerContext`, including state, getters, and handlers.
+Here’s how you can structure the documentation for the `useScheduler` hook in your library README, making it suitable for users looking to understand how to use the hook effectively.
+
+---
+
+## `useScheduler` Hook
+
+The `useScheduler` hook is a custom React hook that provides access to the `SchedulerContext`. It allows components to access the current state of the scheduler, various utility functions (getters), and functions for modifying the state (handlers).
+
+### Usage
+
+To use the `useScheduler` hook, import it into your component and call it to access the scheduler's state, dispatch function, getters, and handlers.
 
 ```tsx
-const { state, dispatch, getters, handlers } = useScheduler();
+import { useScheduler } from "mina-scheduler";
+
+const MyComponent = () => {
+  const { events, dispatch, getters, handlers } = useScheduler();
+
+  // Example of using the dispatch to add an event
+  const addEvent = (event) => {
+    dispatch({ type: "ADD_EVENT", payload: event });
+  };
+
+  return (
+    <div>
+      {/* Render events */}
+      {events.map((event) => (
+        <div key={event.id}>{event.title}</div>
+      ))}
+    </div>
+  );
+};
+```
+
+### Return Values
+
+The `useScheduler` hook returns an object containing the following properties:
+
+- **`events`**: 
+  - Type: `SchedulerState`
+  - Description: Contains the current state of the scheduler, including an array of events.
+
+- **`dispatch`**: 
+  - Type: `Dispatch<Action>`
+  - Description: A function to modify the scheduler state. Use it to send actions to the reducer.
+
+  #### Dispatch Call Shape
+
+  The shape of the dispatch call is as follows:
+
+  ```typescript
+  dispatch({
+    type: "ADD_EVENT", // or "REMOVE_EVENT" or "UPDATE_EVENT"
+    payload: { /* Event object */ } // required for "ADD_EVENT" and "UPDATE_EVENT"
+  });
+  ```
+
+  **Action Types**:
+  - **`ADD_EVENT`**: Adds a new event to the scheduler. Use this action when you want to create a new event.
+  - **`REMOVE_EVENT`**: Removes an event based on its `id`. Use this action to delete an existing event.
+  - **`UPDATE_EVENT`**: Updates an existing event. Use this action when you need to modify the details of an event.
+
+- **`getters`**: 
+  - Type: `Getters`
+  - Description: An object containing utility functions to retrieve information from the scheduler state.
+
+  #### Getter Functions
+  - **`getDaysInMonth(month: number, year: number)`**: Returns an array of objects representing each day in the specified month, each containing a list of events for that day.
+  - **`getEventsForDay(day: number, currentDate: Date)`**: Retrieves all events for a specific day.
+  - **`getDaysInWeek(week: number, year: number)`**: Returns an array of Date objects for the specified week.
+  - **`getWeekNumber(date: Date)`**: Returns the week number for the given date.
+  - **`getDayName(day: number)`**: Returns the name of the day for a given index (0 for Sunday, 6 for Saturday).
+
+- **`handlers`**: 
+  - Type: `Handlers`
+  - Description: An object containing functions to handle specific actions related to events.
+
+  #### Handler Functions
+  - **`handleEventStyling(event: Event, dayEvents: Event[])`**: Returns styling properties for rendering an event based on its position among other events on the same day.
+  - **`handleAddEvent(event: Event)`**: Adds a new event to the scheduler. You can call this function to handle event creation logic.
+  - **`handleUpdateEvent(event: Event, id: string)`**: Updates an existing event by its `id`. Use this function to modify event details.
+  - **`handleDeleteEvent(id: string)`**: Deletes an event by its `id`. Call this function to remove events from the scheduler.
+
+### Example
+
+Here’s a simple example of how to use the `useScheduler` hook in a component:
+
+```tsx
+import React from "react";
+import { useScheduler } from "@/path/to/SchedulerContext";
+
+const EventList = () => {
+  const { events, dispatch, handlers } = useScheduler();
+
+  const removeEvent = (id) => {
+    handlers.handleDeleteEvent(id);
+  };
+
+  return (
+    <div>
+      {events.events.map((event) => (
+        <div key={event.id}>
+          <h3>{event.title}</h3>
+          <button onClick={() => removeEvent(event.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+};
 ```
 
 ### Event Schema and Form Data

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@nextui-org/button";
 import { Card } from "@nextui-org/card";
@@ -8,12 +8,13 @@ import { Chip } from "@nextui-org/chip";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
 
-import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/schedular-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
 import EventStyled from "../event-component/event-styled";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { Event, CustomEventModal } from "@/types";
+
 export default function MonthView({
   prevButton,
   nextButton,
@@ -28,7 +29,7 @@ export default function MonthView({
   classNames?: { prev?: string; next?: string; addEvent?: string };
 }) {
   const daysOfWeek = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
-  const { getters, state } = useScheduler();
+  const { getters } = useScheduler();
   const { showModal } = useModalContext();
 
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -111,7 +112,6 @@ export default function MonthView({
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
-
 
   return (
     <div>

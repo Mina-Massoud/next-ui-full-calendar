@@ -1,6 +1,6 @@
 "use client";
 
-import { EventFormData } from "@/providers/schedular-provider";
+import { EventFormData } from "@/types";
 import { parseDate, CalendarDate, Time } from "@internationalized/date";
 import { DateRangePicker } from "@nextui-org/date-picker";
 import { TimeInput } from "@nextui-org/date-input";

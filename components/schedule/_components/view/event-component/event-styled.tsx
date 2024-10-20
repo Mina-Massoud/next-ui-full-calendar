@@ -1,11 +1,10 @@
 "use client";
 
-import { Event, Variant, variants } from "@/providers/schedular-provider";
 import React, { useMemo } from "react";
 import { Chip } from "@nextui-org/chip";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { Event, CustomEventModal } from "@/types";
 // Function to format date
 const formatDate = (date: Date) => {
   return date.toLocaleString("en-US", {
