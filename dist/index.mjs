@@ -241,7 +241,6 @@ function _ts_generator(thisArg, body) {
     }
 }
 import React2, { createContext as createContext2, useContext as useContext2, useReducer } from "react";
-import { z } from "zod";
 // providers/modal-provider.tsx
 import React, { createContext, useContext, useState } from "react";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/modal";
@@ -341,20 +340,6 @@ var useModalContext = function() {
     return context;
 };
 // providers/schedular-provider.tsx
-var eventSchema = z.object({
-    title: z.string().nonempty("Event name is required"),
-    description: z.string().optional(),
-    startDate: z.date(),
-    endDate: z.date(),
-    variant: z.enum([
-        "primary",
-        "danger",
-        "success",
-        "warning",
-        "default"
-    ]),
-    color: z.string().nonempty("Color selection is required")
-});
 var initialState = {
     // events: [
     //   {
@@ -683,7 +668,7 @@ var SchedulerProvider = function(param) {
     };
     return /* @__PURE__ */ React2.createElement(SchedulerContext.Provider, {
         value: {
-            state: state,
+            events: state,
             dispatch: dispatch,
             getters: getters,
             handlers: handlers
@@ -698,7 +683,7 @@ var useScheduler = function() {
     return context;
 };
 // components/schedule/_components/view/schedular-view-filteration.tsx
-import React10, { useEffect as useEffect4 } from "react";
+import React10, { useEffect as useEffect3 } from "react";
 import { motion as motion4 } from "framer-motion";
 import { Button as Button5 } from "@nextui-org/button";
 import { Tabs, Tab } from "@nextui-org/tabs";
@@ -794,6 +779,30 @@ function SelectDate(param) {
 // components/schedule/_modals/add-event-modal.tsx
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+// types/index.ts
+import { z } from "zod";
+var variants = [
+    "success",
+    "primary",
+    "default",
+    "warning",
+    "danger"
+];
+var eventSchema = z.object({
+    title: z.string().nonempty("Event name is required"),
+    description: z.string().optional(),
+    startDate: z.date(),
+    endDate: z.date(),
+    variant: z.enum([
+        "primary",
+        "danger",
+        "success",
+        "warning",
+        "default"
+    ]),
+    color: z.string().nonempty("Color selection is required")
+});
+// components/schedule/_modals/add-event-modal.tsx
 import { v4 as uuidv4 } from "uuid";
 function AddEventModal(param) {
     var CustomAddEventModal = param.CustomAddEventModal;
@@ -1264,7 +1273,7 @@ function MonthView(param) {
         "Thu",
         "Fri"
     ];
-    var _useScheduler = useScheduler(), getters = _useScheduler.getters, state = _useScheduler.state;
+    var getters = useScheduler().getters;
     var showModal = useModalContext().showModal;
     var _useState5 = _sliced_to_array(useState5(/* @__PURE__ */ new Date()), 2), currentDate = _useState5[0], setCurrentDate = _useState5[1];
     var daysInMonth = getters.getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear());
@@ -1665,11 +1674,11 @@ function SchedulerViewFilteration(param) {
     _CustomComponents_customButtons6, _classNames_buttons;
     var _useModalContext = useModalContext(), showAddEventModal = _useModalContext.showModal;
     var _React10_useState = _sliced_to_array(React10.useState(false), 2), clientSide = _React10_useState[0], setClientSide = _React10_useState[1];
-    useEffect4(function() {
+    useEffect3(function() {
         setClientSide(true);
     }, []);
     var _React10_useState1 = _sliced_to_array(React10.useState(clientSide ? window.innerWidth <= 768 : false), 2), isMobile = _React10_useState1[0], setIsMobile = _React10_useState1[1];
-    useEffect4(function() {
+    useEffect3(function() {
         var handleResize = function handleResize() {
             if (window && window.innerWidth <= 768) {
                 setIsMobile(true);
@@ -1769,4 +1778,4 @@ function SchedulerViewFilteration(param) {
         startContent: /* @__PURE__ */ React10.createElement(Calendar, null)
     }, "Add Event"))));
 }
-export { SchedulerViewFilteration as SchedularView, SchedulerProvider };
+export { SchedulerViewFilteration as SchedularView, SchedulerProvider, eventSchema, useScheduler, variants };

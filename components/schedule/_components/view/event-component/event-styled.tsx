@@ -1,11 +1,13 @@
 "use client";
 
-import { Event, Variant, variants } from "@/providers/schedular-provider";
-import React, { useMemo } from "react";
+import React from "react";
 import { Chip } from "@nextui-org/chip";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { Event, CustomEventModal } from "@/types";
+import { TrashIcon } from "lucide-react";
+import { useScheduler } from "@/app";
+import { motion } from "framer-motion";
 // Function to format date
 const formatDate = (date: Date) => {
   return date.toLocaleString("en-US", {
@@ -32,6 +34,7 @@ export default function EventStyled({
 }) {
   const { showModal: showEventModal } = useModalContext();
 
+  const { handlers } = useScheduler();
   // Handler function
   function handleEditEvent(event: Event) {
     // console.log("Edit event", event);
@@ -52,25 +55,55 @@ export default function EventStyled({
   }
 
   return (
-    <div
-      onClickCapture={(e) => {
-        e.stopPropagation(); // Stop event from propagating to parent
-        handleEditEvent({
-          id: event?.id,
-          title: event?.title,
-          startDate: event?.startDate,
-          endDate: event?.endDate,
-          description: event?.description,
-          variant: event?.variant,
-        });
-      }}
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.2, ease: "easeInOut" }}
       key={event?.id}
-      className="w-full  use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
+      className="w-full relative use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg  flex flex-col flex-grow "
     >
+      <Chip
+        onClickCapture={(e: React.MouseEvent<HTMLDivElement>) => {
+          e.stopPropagation();
+          handlers.handleDeleteEvent(event?.id);
+        }}
+        color="danger"
+        variant="solid"
+        classNames={{ content: "max-w-fit min-w-0 p-1" }}
+        className="absolute z-50 right-0 top-[-5px]"
+      >
+        <TrashIcon size={12} />
+      </Chip>
       {event.CustomEventComponent ? (
-        <event.CustomEventComponent {...event} />
+        <div
+          onClickCapture={(e) => {
+            e.stopPropagation(); // Stop event from propagating to parent
+            handleEditEvent({
+              id: event?.id,
+              title: event?.title,
+              startDate: event?.startDate,
+              endDate: event?.endDate,
+              description: event?.description,
+              variant: event?.variant,
+            });
+          }}
+        >
+          <event.CustomEventComponent {...event} />
+        </div>
       ) : (
         <Chip
+          onClickCapture={(e) => {
+            e.stopPropagation(); // Stop event from propagating to parent
+            handleEditEvent({
+              id: event?.id,
+              title: event?.title,
+              startDate: event?.startDate,
+              endDate: event?.endDate,
+              description: event?.description,
+              variant: event?.variant,
+            });
+          }}
           variant="flat"
           color={event?.variant}
           classNames={{ content: "p-0" }}
@@ -96,6 +129,6 @@ export default function EventStyled({
           </div>
         </Chip>
       )}
-    </div>
+    </motion.div>
   );
 }

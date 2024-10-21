@@ -310,12 +310,20 @@ __export(app_exports, {
     },
     SchedulerProvider: function() {
         return SchedulerProvider;
+    },
+    eventSchema: function() {
+        return eventSchema;
+    },
+    useScheduler: function() {
+        return useScheduler;
+    },
+    variants: function() {
+        return variants;
     }
 });
 module.exports = __toCommonJS(app_exports);
 // providers/schedular-provider.tsx
 var import_react2 = __toESM(require("react"));
-var import_zod = require("zod");
 // providers/modal-provider.tsx
 var import_react = __toESM(require("react"));
 var import_modal = require("@nextui-org/modal");
@@ -415,20 +423,6 @@ var useModalContext = function() {
     return context;
 };
 // providers/schedular-provider.tsx
-var eventSchema = import_zod.z.object({
-    title: import_zod.z.string().nonempty("Event name is required"),
-    description: import_zod.z.string().optional(),
-    startDate: import_zod.z.date(),
-    endDate: import_zod.z.date(),
-    variant: import_zod.z.enum([
-        "primary",
-        "danger",
-        "success",
-        "warning",
-        "default"
-    ]),
-    color: import_zod.z.string().nonempty("Color selection is required")
-});
 var initialState = {
     // events: [
     //   {
@@ -757,7 +751,7 @@ var SchedulerProvider = function(param) {
     };
     return /* @__PURE__ */ import_react2.default.createElement(SchedulerContext.Provider, {
         value: {
-            state: state,
+            events: state,
             dispatch: dispatch,
             getters: getters,
             handlers: handlers
@@ -868,6 +862,30 @@ function SelectDate(param) {
 // components/schedule/_modals/add-event-modal.tsx
 var import_react_hook_form = require("react-hook-form");
 var import_zod2 = require("@hookform/resolvers/zod");
+// types/index.ts
+var import_zod = require("zod");
+var variants = [
+    "success",
+    "primary",
+    "default",
+    "warning",
+    "danger"
+];
+var eventSchema = import_zod.z.object({
+    title: import_zod.z.string().nonempty("Event name is required"),
+    description: import_zod.z.string().optional(),
+    startDate: import_zod.z.date(),
+    endDate: import_zod.z.date(),
+    variant: import_zod.z.enum([
+        "primary",
+        "danger",
+        "success",
+        "warning",
+        "default"
+    ]),
+    color: import_zod.z.string().nonempty("Color selection is required")
+});
+// components/schedule/_modals/add-event-modal.tsx
 var import_uuid = require("uuid");
 function AddEventModal(param) {
     var CustomAddEventModal = param.CustomAddEventModal;
@@ -1338,7 +1356,7 @@ function MonthView(param) {
         "Thu",
         "Fri"
     ];
-    var _useScheduler = useScheduler(), getters = _useScheduler.getters, state = _useScheduler.state;
+    var getters = useScheduler().getters;
     var showModal = useModalContext().showModal;
     var _ref = _sliced_to_array((0, import_react8.useState)(/* @__PURE__ */ new Date()), 2), currentDate = _ref[0], setCurrentDate = _ref[1];
     var daysInMonth = getters.getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear());
@@ -1846,5 +1864,8 @@ function SchedulerViewFilteration(param) {
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
     SchedularView: SchedularView,
-    SchedulerProvider: SchedulerProvider
+    SchedulerProvider: SchedulerProvider,
+    eventSchema: eventSchema,
+    useScheduler: useScheduler,
+    variants: variants
 });

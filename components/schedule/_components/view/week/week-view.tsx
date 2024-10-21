@@ -1,16 +1,14 @@
 import React, { useRef, useState } from "react";
-import { Card } from "@nextui-org/card";
-import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/schedular-provider";
 import { Chip } from "@nextui-org/chip";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { AnimatePresence, motion } from "framer-motion"; // Import Framer Motion
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
-import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
 import { Button } from "@nextui-org/button";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { Event, CustomEventModal } from "@/types";
 
 const hours = Array.from(
   { length: 24 },
@@ -304,35 +302,36 @@ export default function WeeklyView({
                     handleAddEventWeek(dayIndex, detailedHour as string);
                   }}
                 >
-                  {dayEvents?.map((event, eventIndex) => {
-                    const { height, left, maxWidth, minWidth, top, zIndex } =
-                      handlers.handleEventStyling(event, dayEvents);
+                  <AnimatePresence mode="wait">
+                    {dayEvents?.map((event, eventIndex) => {
+                      const { height, left, maxWidth, minWidth, top, zIndex } =
+                        handlers.handleEventStyling(event, dayEvents);
 
-                    return (
-                      <div
-                        key={`event-${event.id}-${eventIndex}`}
-                        style={{
-                          minHeight: height,
-                          height,
-                          top: top,
-                          left: left,
-                          maxWidth: maxWidth,
-                          minWidth: minWidth,
-                        }}
-                        className="flex transitio transition-all duration-1000 flex-grow flex-col z-50 absolute"
-                      >
-                        <EventStyled
-                          event={{
-                            ...event,
-                            CustomEventComponent,
-                            minmized: true,
+                      return (
+                        <div
+                          key={`event-${event.id}-${eventIndex}`}
+                          style={{
+                            minHeight: height,
+                            height,
+                            top: top,
+                            left: left,
+                            maxWidth: maxWidth,
+                            minWidth: minWidth,
                           }}
-                          CustomEventModal={CustomEventModal}
-                        />
-                      </div>
-                    );
-                  })}
-
+                          className="flex transitio transition-all duration-1000 flex-grow flex-col z-50 absolute"
+                        >
+                          <EventStyled
+                            event={{
+                              ...event,
+                              CustomEventComponent,
+                              minmized: true,
+                            }}
+                            CustomEventModal={CustomEventModal}
+                          />
+                        </div>
+                      );
+                    })}
+                  </AnimatePresence>
                   {/* Render hour slots */}
                   {Array.from({ length: 24 }, (_, hourIndex) => (
                     <div

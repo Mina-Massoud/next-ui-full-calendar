@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@nextui-org/button";
 import { Card } from "@nextui-org/card";
@@ -8,12 +8,13 @@ import { Chip } from "@nextui-org/chip";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import clsx from "clsx";
 
-import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/schedular-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import ShowMoreEventsModal from "@/components/schedule/_modals/show-more-events-modal";
 import EventStyled from "../event-component/event-styled";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { Event, CustomEventModal } from "@/types";
+
 export default function MonthView({
   prevButton,
   nextButton,
@@ -28,7 +29,7 @@ export default function MonthView({
   classNames?: { prev?: string; next?: string; addEvent?: string };
 }) {
   const daysOfWeek = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
-  const { getters, state } = useScheduler();
+  const { getters } = useScheduler();
   const { showModal } = useModalContext();
 
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -112,7 +113,6 @@ export default function MonthView({
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
-
   return (
     <div>
       <div className="flex flex-col mb-4">
@@ -160,14 +160,29 @@ export default function MonthView({
           key={currentDate.getMonth()}
           className="grid grid-cols-7 gap-1 sm:gap-2"
         >
-          {daysOfWeek.map((day, idx) => (
-            <div
-              key={idx}
-              className="text-left my-8 text-4xl tracking-tighter font-medium"
-            >
-              {day}
-            </div>
-          ))}
+          {Array.from({ length: 7 }, (_, idx) => {
+            // Calculate the correct day of the week for the current month
+            const firstDayOfMonth = new Date(
+              currentDate.getFullYear(),
+              currentDate.getMonth(),
+              1
+            );
+            const dayIndex = (firstDayOfMonth.getDay() + 6) % 7; // Adjust for the week starting on Sunday
+            const actualDayIndex = (dayIndex + idx) % 7; // Calculate the actual day index
+            const dayName = new Date(0, 0, 1 + actualDayIndex).toLocaleString(
+              "default",
+              { weekday: "short" }
+            );
+
+            return (
+              <div
+                key={idx}
+                className="text-left my-8 text-4xl tracking-tighter font-medium"
+              >
+                {dayName}
+              </div>
+            );
+          })}
 
           {daysInMonth.map((dayObj) => {
             const dayEvents = getters.getEventsForDay(dayObj.day, currentDate); // Get events for this day
@@ -200,16 +215,18 @@ export default function MonthView({
                     {dayObj.day}
                   </div>
                   <div className="flex-grow flex flex-col gap-2  w-full overflow-hidden">
-                    {dayEvents?.length > 0 && (
-                      <EventStyled
-                        event={{
-                          ...dayEvents[0],
-                          CustomEventComponent,
-                          minmized: true,
-                        }}
-                        CustomEventModal={CustomEventModal}
-                      />
-                    )}
+                    <AnimatePresence mode="wait">
+                      {dayEvents?.length > 0 && (
+                        <EventStyled
+                          event={{
+                            ...dayEvents[0],
+                            CustomEventComponent,
+                            minmized: true,
+                          }}
+                          CustomEventModal={CustomEventModal}
+                        />
+                      )}
+                    </AnimatePresence>
                     {dayEvents.length > 1 && (
                       <Chip
                         onClick={(e) => {

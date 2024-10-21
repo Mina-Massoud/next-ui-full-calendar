@@ -1,6 +1,6 @@
 import EventStyled from "@/components/schedule/_components/view/event-component/event-styled";
 import { useModalContext } from "@/providers/modal-provider";
-import { Event } from "@/providers/schedular-provider";
+import { Event } from "@/types";
 import React from "react";
 
 export default function ShowMoreEventsModal() {

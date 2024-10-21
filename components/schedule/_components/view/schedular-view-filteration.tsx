@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@nextui-org/button";
 import { Tabs, Tab } from "@nextui-org/tabs";
 import { Calendar, CalendarDaysIcon } from "lucide-react";
@@ -12,12 +12,7 @@ import DailyView from "./day/daily-view";
 import MonthView from "./month/month-view";
 import WeeklyView from "./week/week-view";
 import { useModalContext } from "@/providers/modal-provider";
-import {
-  ClassNames,
-  CustomComponents,
-  startOfWeek,
-  Views,
-} from "@/types/schedular-viewer";
+import { ClassNames, CustomComponents, Views } from "@/types/index";
 
 // Animation settings for Framer Motion
 const animationConfig = {
@@ -107,7 +102,8 @@ export default function SchedulerViewFilteration({
 
   const viewsSelector = isMobile ? views?.mobileViews : views?.views;
   return (
-    <div className="flex w-full flex-col">
+   
+    <div className="flex w-full flex-col p-3">
       <div className="flex w-full">
         <div className="dayly-weekly-monthly-selection relative w-full">
           <Tabs
@@ -124,7 +120,7 @@ export default function SchedulerViewFilteration({
                     CustomComponents.customTabs.CustomDayTab
                   ) : (
                     <div className="flex items-center space-x-2">
-                      <CalendarDaysIcon />
+                      <CalendarDaysIcon size={15} />
                       <span>Day</span>
                     </div>
                   )
@@ -236,5 +232,6 @@ export default function SchedulerViewFilteration({
         </div>
       </div>
     </div>
+   
   );
 }

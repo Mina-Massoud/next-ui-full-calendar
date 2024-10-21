@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@nextui-org/button";
 import { Chip } from "@nextui-org/chip";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-import { Event, useScheduler } from "@/providers/schedular-provider";
+import { useScheduler } from "@/providers/schedular-provider";
 import { useModalContext } from "@/providers/modal-provider";
 import AddEventModal from "@/components/schedule/_modals/add-event-modal";
 import EventStyled from "../event-component/event-styled";
-import { CustomEventModal } from "@/types/schedular-viewer";
+import { CustomEventModal, Event } from "@/types";
 
 const hours = Array.from(
   { length: 24 },
@@ -170,22 +170,24 @@ export default function DailyView({
       </div>
       <div className="flex flex-col gap-4">
         <div className="all-day-events">
-          {dayEvents && dayEvents?.length
-            ? dayEvents?.map((event, eventIndex) => {
-                return (
-                  <div key={`event-${event.id}-${eventIndex}`}>
-                    <EventStyled
-                      event={{
-                        ...event,
-                        CustomEventComponent,
-                        minmized: false,
-                      }}
-                      CustomEventModal={CustomEventModal}
-                    />
-                  </div>
-                );
-              })
-            : "No events for today"}
+          <AnimatePresence mode="wait">
+            {dayEvents && dayEvents?.length
+              ? dayEvents?.map((event, eventIndex) => {
+                  return (
+                    <div key={`event-${event.id}-${eventIndex}`}>
+                      <EventStyled
+                        event={{
+                          ...event,
+                          CustomEventComponent,
+                          minmized: false,
+                        }}
+                        CustomEventModal={CustomEventModal}
+                      />
+                    </div>
+                  );
+                })
+              : "No events for today"}
+          </AnimatePresence>
         </div>
 
         <div className="relative rounded-md bg-default-50 hover:bg-default-100 transition duration-400">
@@ -223,34 +225,36 @@ export default function DailyView({
                   </div>
                 </div>
               ))}
-              {dayEvents && dayEvents?.length
-                ? dayEvents?.map((event, eventIndex) => {
-                    const { height, left, maxWidth, minWidth, top, zIndex } =
-                      handlers.handleEventStyling(event, dayEvents);
-                    return (
-                      <div
-                        key={`event-${event.id}-${eventIndex}`}
-                        style={{
-                          minHeight: height,
-                          top: top,
-                          left: left,
-                          maxWidth: maxWidth,
-                          minWidth: minWidth,
-                        }}
-                        className="flex transition-all duration-1000 flex-grow flex-col z-50 absolute"
-                      >
-                        <EventStyled
-                          event={{
-                            ...event,
-                            CustomEventComponent,
-                            minmized: true,
+              <AnimatePresence mode="wait">
+                {dayEvents && dayEvents?.length
+                  ? dayEvents?.map((event, eventIndex) => {
+                      const { height, left, maxWidth, minWidth, top, zIndex } =
+                        handlers.handleEventStyling(event, dayEvents);
+                      return (
+                        <div
+                          key={`event-${event.id}-${eventIndex}`}
+                          style={{
+                            minHeight: height,
+                            top: top,
+                            left: left,
+                            maxWidth: maxWidth,
+                            minWidth: minWidth,
                           }}
-                          CustomEventModal={CustomEventModal}
-                        />
-                      </div>
-                    );
-                  })
-                : ""}
+                          className="flex transition-all duration-1000 flex-grow flex-col z-50 absolute"
+                        >
+                          <EventStyled
+                            event={{
+                              ...event,
+                              CustomEventComponent,
+                              minmized: true,
+                            }}
+                            CustomEventModal={CustomEventModal}
+                          />
+                        </div>
+                      );
+                    })
+                  : ""}
+              </AnimatePresence>
             </div>
           </motion.div>
 

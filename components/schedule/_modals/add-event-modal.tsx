@@ -16,14 +16,9 @@ import { useModalContext } from "@/providers/modal-provider";
 import SelectDate from "@/components/schedule/_components/add-event-components/select-date";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  EventFormData,
-  eventSchema,
-  useScheduler,
-  Variant,
-} from "@/providers/schedular-provider";
+import { EventFormData, eventSchema, Variant, Event } from "@/types/index";
+import { useScheduler } from "@/providers/schedular-provider";
 import { v4 as uuidv4 } from "uuid"; // Use UUID to generate event IDs
-import { Event } from "@/providers/schedular-provider"; // Import Event type
 
 export default function AddEventModal({
   CustomAddEventModal,
