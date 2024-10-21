@@ -69,7 +69,7 @@ export default function SelectDate({
 
   return (
     <div>
-      <div className="w-full flex gap-4">
+      <div className="w-full flex gap-4 max-w-full flex-wrap">
         <DateRangePicker
           label="Stay duration"
           isRequired
