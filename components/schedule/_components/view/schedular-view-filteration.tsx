@@ -80,7 +80,8 @@ export default function SchedulerViewFilteration({
         const startDate = new Date(
           new Date().getFullYear(),
           new Date().getMonth(),
-          selectedDay ?? 1, // Use 1 if selectedDay is undefined or null
+          selectedDay ?? // current day
+            new Date().getDate(),
           0,
           0,
           0,
@@ -89,7 +90,8 @@ export default function SchedulerViewFilteration({
         const endDate = new Date(
           new Date().getFullYear(),
           new Date().getMonth(),
-          selectedDay ?? 1,
+          selectedDay ?? // current day
+            new Date().getDate(),
           23,
           59,
           59,
@@ -102,8 +104,7 @@ export default function SchedulerViewFilteration({
 
   const viewsSelector = isMobile ? views?.mobileViews : views?.views;
   return (
-   
-    <div className="flex w-full flex-col p-3">
+    <div className="flex w-full flex-col">
       <div className="flex w-full">
         <div className="dayly-weekly-monthly-selection relative w-full">
           <Tabs
@@ -232,6 +233,5 @@ export default function SchedulerViewFilteration({
         </div>
       </div>
     </div>
-   
   );
 }

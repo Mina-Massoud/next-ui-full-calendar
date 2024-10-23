@@ -137,7 +137,7 @@ export default function DailyView({
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <div className="flex justify-between gap-3 flex-wrap mb-5">
         <h1 className="text-3xl font-semibold mb-4">
           {getFormattedDayTitle()}

@@ -109,12 +109,6 @@ export default function SelectDate({
                 startTime: e,
               });
             }}
-            isInvalid={
-              dateState?.startTime &&
-              dateState?.endTime &&
-              dateState.startTime.hour * 60 + dateState.startTime.minute >=
-                dateState.endTime.hour * 60 + dateState.endTime.minute
-            }
           />
 
           <TimeInput

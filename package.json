@@ -1,6 +1,6 @@
 {
   "name": "mina-scheduler",
-  "version": "0.0.9",
+  "version": "1.0.1",
   "private": false,
   "scripts": {
     "dev": "next dev --turbo",

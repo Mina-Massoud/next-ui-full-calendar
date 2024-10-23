@@ -767,10 +767,10 @@ var useScheduler = function() {
 };
 // components/schedule/_components/view/schedular-view-filteration.tsx
 var import_react10 = __toESM(require("react"));
-var import_framer_motion4 = require("framer-motion");
+var import_framer_motion5 = require("framer-motion");
 var import_button5 = require("@nextui-org/button");
 var import_tabs = require("@nextui-org/tabs");
-var import_lucide_react4 = require("lucide-react");
+var import_lucide_react5 = require("lucide-react");
 var import_bs = require("react-icons/bs");
 // components/schedule/_modals/add-event-modal.tsx
 var import_react4 = __toESM(require("react"));
@@ -818,7 +818,7 @@ function SelectDate(param) {
         setValue
     ]);
     return /* @__PURE__ */ import_react3.default.createElement("div", null, /* @__PURE__ */ import_react3.default.createElement("div", {
-        className: "w-full flex gap-4"
+        className: "w-full flex gap-4 max-w-full flex-wrap"
     }, /* @__PURE__ */ import_react3.default.createElement(import_date_picker.DateRangePicker, {
         label: "Stay duration",
         isRequired: true,
@@ -846,8 +846,7 @@ function SelectDate(param) {
             setDateState(_object_spread_props(_object_spread({}, dateState), {
                 startTime: e
             }));
-        },
-        isInvalid: (dateState === null || dateState === void 0 ? void 0 : dateState.startTime) && (dateState === null || dateState === void 0 ? void 0 : dateState.endTime) && dateState.startTime.hour * 60 + dateState.startTime.minute >= dateState.endTime.hour * 60 + dateState.endTime.minute
+        }
     }), /* @__PURE__ */ import_react3.default.createElement(import_date_input.TimeInput, {
         label: "End Time",
         defaultValue: dateState === null || dateState === void 0 ? void 0 : dateState.endTime,
@@ -1043,13 +1042,15 @@ function AddEventModal(param) {
 }
 // components/schedule/_components/view/day/daily-view.tsx
 var import_react6 = __toESM(require("react"));
-var import_framer_motion = require("framer-motion");
+var import_framer_motion2 = require("framer-motion");
 var import_button2 = require("@nextui-org/button");
 var import_chip2 = require("@nextui-org/chip");
-var import_lucide_react = require("lucide-react");
+var import_lucide_react2 = require("lucide-react");
 // components/schedule/_components/view/event-component/event-styled.tsx
 var import_react5 = __toESM(require("react"));
 var import_chip = require("@nextui-org/chip");
+var import_lucide_react = require("lucide-react");
+var import_framer_motion = require("framer-motion");
 var formatDate = function(date) {
     return date.toLocaleString("en-US", {
         weekday: "short",
@@ -1063,6 +1064,7 @@ var formatDate = function(date) {
 function EventStyled(param) {
     var event = param.event, CustomEventModal = param.CustomEventModal;
     var _useModalContext = useModalContext(), showEventModal = _useModalContext.showModal;
+    var handlers = useScheduler().handlers;
     function handleEditEvent(event2) {
         var _CustomEventModal_CustomAddEventModal;
         showEventModal({
@@ -1080,7 +1082,51 @@ function EventStyled(param) {
             })
         });
     }
-    return /* @__PURE__ */ import_react5.default.createElement("div", {
+    return /* @__PURE__ */ import_react5.default.createElement(import_framer_motion.motion.div, {
+        initial: {
+            opacity: 0,
+            scale: 0.9
+        },
+        animate: {
+            opacity: 1,
+            scale: 1
+        },
+        exit: {
+            opacity: 0,
+            scale: 0.9
+        },
+        transition: {
+            duration: 0.2,
+            ease: "easeInOut"
+        },
+        key: event === null || event === void 0 ? void 0 : event.id,
+        className: "w-full relative use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg  flex flex-col flex-grow "
+    }, /* @__PURE__ */ import_react5.default.createElement(import_chip.Chip, {
+        onClickCapture: function(e) {
+            e.stopPropagation();
+            handlers.handleDeleteEvent(event === null || event === void 0 ? void 0 : event.id);
+        },
+        color: "danger",
+        variant: "solid",
+        classNames: {
+            content: "max-w-fit min-w-0 p-1"
+        },
+        className: "absolute z-50 right-0 top-[-5px]"
+    }, /* @__PURE__ */ import_react5.default.createElement(import_lucide_react.TrashIcon, {
+        size: 12
+    })), event.CustomEventComponent ? /* @__PURE__ */ import_react5.default.createElement("div", {
+        onClickCapture: function(e) {
+            e.stopPropagation();
+            handleEditEvent({
+                id: event === null || event === void 0 ? void 0 : event.id,
+                title: event === null || event === void 0 ? void 0 : event.title,
+                startDate: event === null || event === void 0 ? void 0 : event.startDate,
+                endDate: event === null || event === void 0 ? void 0 : event.endDate,
+                description: event === null || event === void 0 ? void 0 : event.description,
+                variant: event === null || event === void 0 ? void 0 : event.variant
+            });
+        }
+    }, /* @__PURE__ */ import_react5.default.createElement(event.CustomEventComponent, _object_spread({}, event))) : /* @__PURE__ */ import_react5.default.createElement(import_chip.Chip, {
         onClickCapture: function(e) {
             e.stopPropagation();
             handleEditEvent({
@@ -1092,9 +1138,6 @@ function EventStyled(param) {
                 variant: event === null || event === void 0 ? void 0 : event.variant
             });
         },
-        key: event === null || event === void 0 ? void 0 : event.id,
-        className: "w-full  use-automation-zoom-in cursor-pointer border border-default-400/60 rounded-lg overflow-hidden flex flex-col flex-grow "
-    }, event.CustomEventComponent ? /* @__PURE__ */ import_react5.default.createElement(event.CustomEventComponent, _object_spread({}, event)) : /* @__PURE__ */ import_react5.default.createElement(import_chip.Chip, {
         variant: "flat",
         color: event === null || event === void 0 ? void 0 : event.variant,
         classNames: {
@@ -1225,7 +1268,7 @@ function DailyView(param) {
         setCurrentDate(prevDay);
     };
     return /* @__PURE__ */ import_react6.default.createElement("div", {
-        className: "p-4"
+        className: ""
     }, /* @__PURE__ */ import_react6.default.createElement("div", {
         className: "flex justify-between gap-3 flex-wrap mb-5"
     }, /* @__PURE__ */ import_react6.default.createElement("h1", {
@@ -1236,18 +1279,20 @@ function DailyView(param) {
         onClick: handlePrevDay
     }, prevButton) : /* @__PURE__ */ import_react6.default.createElement(import_button2.Button, {
         className: classNames === null || classNames === void 0 ? void 0 : classNames.prev,
-        startContent: /* @__PURE__ */ import_react6.default.createElement(import_lucide_react.ArrowLeft, null),
+        startContent: /* @__PURE__ */ import_react6.default.createElement(import_lucide_react2.ArrowLeft, null),
         onClick: handlePrevDay
     }, "Prev"), nextButton ? /* @__PURE__ */ import_react6.default.createElement("div", {
         onClick: handleNextDay
     }, nextButton) : /* @__PURE__ */ import_react6.default.createElement(import_button2.Button, {
         className: classNames === null || classNames === void 0 ? void 0 : classNames.next,
         onClick: handleNextDay,
-        endContent: /* @__PURE__ */ import_react6.default.createElement(import_lucide_react.ArrowRight, null)
+        endContent: /* @__PURE__ */ import_react6.default.createElement(import_lucide_react2.ArrowRight, null)
     }, "Next"))), /* @__PURE__ */ import_react6.default.createElement("div", {
         className: "flex flex-col gap-4"
     }, /* @__PURE__ */ import_react6.default.createElement("div", {
         className: "all-day-events"
+    }, /* @__PURE__ */ import_react6.default.createElement(import_framer_motion2.AnimatePresence, {
+        mode: "wait"
     }, dayEvents && (dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.length) ? dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.map(function(event, eventIndex) {
         return /* @__PURE__ */ import_react6.default.createElement("div", {
             key: "event-".concat(event.id, "-").concat(eventIndex)
@@ -1258,9 +1303,9 @@ function DailyView(param) {
             }),
             CustomEventModal: CustomEventModal
         }));
-    }) : "No events for today"), /* @__PURE__ */ import_react6.default.createElement("div", {
+    }) : "No events for today")), /* @__PURE__ */ import_react6.default.createElement("div", {
         className: "relative rounded-md bg-default-50 hover:bg-default-100 transition duration-400"
-    }, /* @__PURE__ */ import_react6.default.createElement(import_framer_motion.motion.div, {
+    }, /* @__PURE__ */ import_react6.default.createElement(import_framer_motion2.motion.div, {
         className: "relative rounded-xl flex ease-in-out",
         ref: hoursColumnRef,
         variants: containerVariants,
@@ -1273,7 +1318,7 @@ function DailyView(param) {
     }, /* @__PURE__ */ import_react6.default.createElement("div", {
         className: "flex  flex-col"
     }, hours.map(function(hour, index) {
-        return /* @__PURE__ */ import_react6.default.createElement(import_framer_motion.motion.div, {
+        return /* @__PURE__ */ import_react6.default.createElement(import_framer_motion2.motion.div, {
             key: "hour-".concat(index),
             variants: itemVariants,
             className: "cursor-pointer   transition duration-300  p-4 h-[64px] text-left text-sm text-muted-foreground border-default-200"
@@ -1292,7 +1337,9 @@ function DailyView(param) {
         }, /* @__PURE__ */ import_react6.default.createElement("div", {
             className: "absolute bg-default-200 flex items-center justify-center text-xs opacity-0 transition left-0 top-0 duration-250 hover:opacity-100 w-full h-full"
         }, "Add Event"));
-    }), dayEvents && (dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.length) ? dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.map(function(event, eventIndex) {
+    }), /* @__PURE__ */ import_react6.default.createElement(import_framer_motion2.AnimatePresence, {
+        mode: "wait"
+    }, dayEvents && (dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.length) ? dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.map(function(event, eventIndex) {
         var _handlers_handleEventStyling = handlers.handleEventStyling(event, dayEvents), height = _handlers_handleEventStyling.height, left = _handlers_handleEventStyling.left, maxWidth = _handlers_handleEventStyling.maxWidth, minWidth = _handlers_handleEventStyling.minWidth, top = _handlers_handleEventStyling.top, zIndex = _handlers_handleEventStyling.zIndex;
         return /* @__PURE__ */ import_react6.default.createElement("div", {
             key: "event-".concat(event.id, "-").concat(eventIndex),
@@ -1311,7 +1358,7 @@ function DailyView(param) {
             }),
             CustomEventModal: CustomEventModal
         }));
-    }) : "")), detailedHour && /* @__PURE__ */ import_react6.default.createElement("div", {
+    }) : ""))), detailedHour && /* @__PURE__ */ import_react6.default.createElement("div", {
         className: "absolute left-[50px] w-[calc(100%-53px)] h-[3px]  bg-primary-300 dark:bg-primary/30 rounded-full pointer-events-none",
         style: {
             top: "".concat(timelinePosition, "px")
@@ -1324,11 +1371,11 @@ function DailyView(param) {
 }
 // components/schedule/_components/view/month/month-view.tsx
 var import_react8 = __toESM(require("react"));
-var import_framer_motion2 = require("framer-motion");
+var import_framer_motion3 = require("framer-motion");
 var import_button3 = require("@nextui-org/button");
 var import_card = require("@nextui-org/card");
 var import_chip3 = require("@nextui-org/chip");
-var import_lucide_react2 = require("lucide-react");
+var import_lucide_react3 = require("lucide-react");
 var import_clsx = __toESM(require("clsx"));
 // components/schedule/_modals/show-more-events-modal.tsx
 var import_react7 = __toESM(require("react"));
@@ -1432,7 +1479,7 @@ function MonthView(param) {
     };
     return /* @__PURE__ */ import_react8.default.createElement("div", null, /* @__PURE__ */ import_react8.default.createElement("div", {
         className: "flex flex-col mb-4"
-    }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion2.motion.h2, {
+    }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.motion.h2, {
         key: currentDate.getMonth(),
         initial: {
             opacity: 0
@@ -1455,30 +1502,38 @@ function MonthView(param) {
         onClick: handlePrevMonth
     }, prevButton) : /* @__PURE__ */ import_react8.default.createElement(import_button3.Button, {
         className: classNames === null || classNames === void 0 ? void 0 : classNames.prev,
-        startContent: /* @__PURE__ */ import_react8.default.createElement(import_lucide_react2.ArrowLeft, null),
+        startContent: /* @__PURE__ */ import_react8.default.createElement(import_lucide_react3.ArrowLeft, null),
         onClick: handlePrevMonth
     }, "Prev"), nextButton ? /* @__PURE__ */ import_react8.default.createElement("div", {
         onClick: handleNextMonth
     }, nextButton) : /* @__PURE__ */ import_react8.default.createElement(import_button3.Button, {
         className: classNames === null || classNames === void 0 ? void 0 : classNames.next,
         onClick: handleNextMonth,
-        endContent: /* @__PURE__ */ import_react8.default.createElement(import_lucide_react2.ArrowRight, null)
-    }, "Next"))), /* @__PURE__ */ import_react8.default.createElement(import_framer_motion2.AnimatePresence, {
+        endContent: /* @__PURE__ */ import_react8.default.createElement(import_lucide_react3.ArrowRight, null)
+    }, "Next"))), /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.AnimatePresence, {
         mode: "wait"
-    }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion2.motion.div, {
+    }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.motion.div, {
         variants: containerVariants3,
         initial: "hidden",
         animate: "visible",
         key: currentDate.getMonth(),
         className: "grid grid-cols-7 gap-1 sm:gap-2"
-    }, daysOfWeek.map(function(day, idx) {
+    }, Array.from({
+        length: 7
+    }, function(_, idx) {
+        var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        var dayIndex = (firstDayOfMonth.getDay() + 6) % 7;
+        var actualDayIndex = (dayIndex + idx) % 7;
+        var dayName = new Date(0, 0, 1 + actualDayIndex).toLocaleString("default", {
+            weekday: "short"
+        });
         return /* @__PURE__ */ import_react8.default.createElement("div", {
             key: idx,
             className: "text-left my-8 text-4xl tracking-tighter font-medium"
-        }, day);
+        }, dayName);
     }), daysInMonth.map(function(dayObj) {
         var dayEvents = getters.getEventsForDay(dayObj.day, currentDate);
-        return /* @__PURE__ */ import_react8.default.createElement(import_framer_motion2.motion.div, {
+        return /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.motion.div, {
             className: " hover:z-50 border-none h-[150px] rounded group flex flex-col",
             key: dayObj.day,
             variants: itemVariants2
@@ -1493,13 +1548,15 @@ function MonthView(param) {
             /* @__PURE__ */ new Date().getDate() === dayObj.day && /* @__PURE__ */ new Date().getMonth() === currentDate.getMonth() && /* @__PURE__ */ new Date().getFullYear() === currentDate.getFullYear() ? "text-secondary-500" : "")
         }, dayObj.day), /* @__PURE__ */ import_react8.default.createElement("div", {
             className: "flex-grow flex flex-col gap-2  w-full overflow-hidden"
+        }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.AnimatePresence, {
+            mode: "wait"
         }, (dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.length) > 0 && /* @__PURE__ */ import_react8.default.createElement(EventStyled, {
             event: _object_spread_props(_object_spread({}, dayEvents[0]), {
                 CustomEventComponent: CustomEventComponent,
                 minmized: true
             }),
             CustomEventModal: CustomEventModal
-        }), dayEvents.length > 1 && /* @__PURE__ */ import_react8.default.createElement(import_chip3.Chip, {
+        })), dayEvents.length > 1 && /* @__PURE__ */ import_react8.default.createElement(import_chip3.Chip, {
             onClick: function(e) {
                 e.stopPropagation();
                 handleShowMoreEvents(dayEvents);
@@ -1516,9 +1573,9 @@ function MonthView(param) {
 // components/schedule/_components/view/week/week-view.tsx
 var import_react9 = __toESM(require("react"));
 var import_chip4 = require("@nextui-org/chip");
-var import_framer_motion3 = require("framer-motion");
+var import_framer_motion4 = require("framer-motion");
 var import_button4 = require("@nextui-org/button");
-var import_lucide_react3 = require("lucide-react");
+var import_lucide_react4 = require("lucide-react");
 var import_clsx2 = __toESM(require("clsx"));
 var hours2 = Array.from({
     length: 24
@@ -1609,7 +1666,7 @@ function WeeklyView(param) {
     }
     return /* @__PURE__ */ import_react9.default.createElement("div", {
         className: "flex flex-col gap-4"
-    }, /* @__PURE__ */ import_react9.default.createElement(import_framer_motion3.motion.div, {
+    }, /* @__PURE__ */ import_react9.default.createElement(import_framer_motion4.motion.div, {
         key: currentDate.toDateString() + "parent",
         className: "all-week-events flex flex-col gap-2",
         variants: containerVariants2,
@@ -1621,14 +1678,14 @@ function WeeklyView(param) {
         onClick: handlePrevWeek
     }, prevButton) : /* @__PURE__ */ import_react9.default.createElement(import_button4.Button, {
         className: classNames === null || classNames === void 0 ? void 0 : classNames.prev,
-        startContent: /* @__PURE__ */ import_react9.default.createElement(import_lucide_react3.ArrowLeft, null),
+        startContent: /* @__PURE__ */ import_react9.default.createElement(import_lucide_react4.ArrowLeft, null),
         onClick: handlePrevWeek
     }, "Prev"), nextButton ? /* @__PURE__ */ import_react9.default.createElement("div", {
         onClick: handleNextWeek
     }, nextButton) : /* @__PURE__ */ import_react9.default.createElement(import_button4.Button, {
         className: classNames === null || classNames === void 0 ? void 0 : classNames.next,
         onClick: handleNextWeek,
-        endContent: /* @__PURE__ */ import_react9.default.createElement(import_lucide_react3.ArrowRight, null)
+        endContent: /* @__PURE__ */ import_react9.default.createElement(import_lucide_react4.ArrowRight, null)
     }, "Next")), /* @__PURE__ */ import_react9.default.createElement("div", {
         key: currentDate.toDateString(),
         className: "grid use-automation-zoom-in grid-cols-8 gap-0"
@@ -1690,6 +1747,8 @@ function WeeklyView(param) {
             onClick: function() {
                 handleAddEventWeek(dayIndex, detailedHour);
             }
+        }, /* @__PURE__ */ import_react9.default.createElement(import_framer_motion4.AnimatePresence, {
+            mode: "wait"
         }, dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.map(function(event, eventIndex) {
             var _handlers_handleEventStyling = handlers.handleEventStyling(event, dayEvents), height = _handlers_handleEventStyling.height, left = _handlers_handleEventStyling.left, maxWidth = _handlers_handleEventStyling.maxWidth, minWidth = _handlers_handleEventStyling.minWidth, top = _handlers_handleEventStyling.top, zIndex = _handlers_handleEventStyling.zIndex;
             return /* @__PURE__ */ import_react9.default.createElement("div", {
@@ -1710,7 +1769,7 @@ function WeeklyView(param) {
                 }),
                 CustomEventModal: CustomEventModal
             }));
-        }), Array.from({
+        })), Array.from({
             length: 24
         }, function(_2, hourIndex) {
             return /* @__PURE__ */ import_react9.default.createElement("div", {
@@ -1788,9 +1847,10 @@ function SchedulerViewFilteration(param) {
             getter: /*#__PURE__*/ _async_to_generator(function() {
                 var startDate, endDate;
                 return _ts_generator(this, function(_state) {
-                    startDate = new Date(/* @__PURE__ */ new Date().getFullYear(), /* @__PURE__ */ new Date().getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : 1, // Use 1 if selectedDay is undefined or null
-                    0, 0, 0, 0);
-                    endDate = new Date(/* @__PURE__ */ new Date().getFullYear(), /* @__PURE__ */ new Date().getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : 1, 23, 59, 59, 999);
+                    startDate = new Date(/* @__PURE__ */ new Date().getFullYear(), /* @__PURE__ */ new Date().getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : // current day
+                    /* @__PURE__ */ new Date().getDate(), 0, 0, 0, 0);
+                    endDate = new Date(/* @__PURE__ */ new Date().getFullYear(), /* @__PURE__ */ new Date().getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : // current day
+                    /* @__PURE__ */ new Date().getDate(), 23, 59, 59, 999);
                     return [
                         2,
                         {
@@ -1818,8 +1878,10 @@ function SchedulerViewFilteration(param) {
         key: "day",
         title: (CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customTabs = CustomComponents.customTabs) === null || _CustomComponents_customTabs === void 0 ? void 0 : _CustomComponents_customTabs.CustomDayTab) ? CustomComponents.customTabs.CustomDayTab : /* @__PURE__ */ import_react10.default.createElement("div", {
             className: "flex items-center space-x-2"
-        }, /* @__PURE__ */ import_react10.default.createElement(import_lucide_react4.CalendarDaysIcon, null), /* @__PURE__ */ import_react10.default.createElement("span", null, "Day"))
-    }, /* @__PURE__ */ import_react10.default.createElement(import_framer_motion4.motion.div, _object_spread({}, animationConfig), /* @__PURE__ */ import_react10.default.createElement(DailyView, {
+        }, /* @__PURE__ */ import_react10.default.createElement(import_lucide_react5.CalendarDaysIcon, {
+            size: 15
+        }), /* @__PURE__ */ import_react10.default.createElement("span", null, "Day"))
+    }, /* @__PURE__ */ import_react10.default.createElement(import_framer_motion5.motion.div, _object_spread({}, animationConfig), /* @__PURE__ */ import_react10.default.createElement(DailyView, {
         classNames: classNames === null || classNames === void 0 ? void 0 : classNames.buttons,
         prevButton: CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customButtons = CustomComponents.customButtons) === null || _CustomComponents_customButtons === void 0 ? void 0 : _CustomComponents_customButtons.CustomPrevButton,
         nextButton: CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customButtons1 = CustomComponents.customButtons) === null || _CustomComponents_customButtons1 === void 0 ? void 0 : _CustomComponents_customButtons1.CustomNextButton,
@@ -1830,7 +1892,7 @@ function SchedulerViewFilteration(param) {
         title: (CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customTabs1 = CustomComponents.customTabs) === null || _CustomComponents_customTabs1 === void 0 ? void 0 : _CustomComponents_customTabs1.CustomWeekTab) ? CustomComponents.customTabs.CustomWeekTab : /* @__PURE__ */ import_react10.default.createElement("div", {
             className: "flex items-center space-x-2"
         }, /* @__PURE__ */ import_react10.default.createElement(import_bs.BsCalendarWeek, null), /* @__PURE__ */ import_react10.default.createElement("span", null, "Week"))
-    }, /* @__PURE__ */ import_react10.default.createElement(import_framer_motion4.motion.div, _object_spread({}, animationConfig), /* @__PURE__ */ import_react10.default.createElement(WeeklyView, {
+    }, /* @__PURE__ */ import_react10.default.createElement(import_framer_motion5.motion.div, _object_spread({}, animationConfig), /* @__PURE__ */ import_react10.default.createElement(WeeklyView, {
         classNames: classNames === null || classNames === void 0 ? void 0 : classNames.buttons,
         prevButton: CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customButtons2 = CustomComponents.customButtons) === null || _CustomComponents_customButtons2 === void 0 ? void 0 : _CustomComponents_customButtons2.CustomPrevButton,
         nextButton: CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customButtons3 = CustomComponents.customButtons) === null || _CustomComponents_customButtons3 === void 0 ? void 0 : _CustomComponents_customButtons3.CustomNextButton,
@@ -1841,7 +1903,7 @@ function SchedulerViewFilteration(param) {
         title: (CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customTabs2 = CustomComponents.customTabs) === null || _CustomComponents_customTabs2 === void 0 ? void 0 : _CustomComponents_customTabs2.CustomMonthTab) ? CustomComponents.customTabs.CustomMonthTab : /* @__PURE__ */ import_react10.default.createElement("div", {
             className: "flex items-center space-x-2"
         }, /* @__PURE__ */ import_react10.default.createElement(import_bs.BsCalendarMonth, null), /* @__PURE__ */ import_react10.default.createElement("span", null, "Month"))
-    }, /* @__PURE__ */ import_react10.default.createElement(import_framer_motion4.motion.div, _object_spread({}, animationConfig), /* @__PURE__ */ import_react10.default.createElement(MonthView, {
+    }, /* @__PURE__ */ import_react10.default.createElement(import_framer_motion5.motion.div, _object_spread({}, animationConfig), /* @__PURE__ */ import_react10.default.createElement(MonthView, {
         classNames: classNames === null || classNames === void 0 ? void 0 : classNames.buttons,
         prevButton: CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customButtons4 = CustomComponents.customButtons) === null || _CustomComponents_customButtons4 === void 0 ? void 0 : _CustomComponents_customButtons4.CustomPrevButton,
         nextButton: CustomComponents === null || CustomComponents === void 0 ? void 0 : (_CustomComponents_customButtons5 = CustomComponents.customButtons) === null || _CustomComponents_customButtons5 === void 0 ? void 0 : _CustomComponents_customButtons5.CustomNextButton,
@@ -1858,7 +1920,7 @@ function SchedulerViewFilteration(param) {
         },
         className: "absolute top-0 right-0 " + (classNames === null || classNames === void 0 ? void 0 : (_classNames_buttons = classNames.buttons) === null || _classNames_buttons === void 0 ? void 0 : _classNames_buttons.addEvent),
         color: "primary",
-        startContent: /* @__PURE__ */ import_react10.default.createElement(import_lucide_react4.Calendar, null)
+        startContent: /* @__PURE__ */ import_react10.default.createElement(import_lucide_react5.Calendar, null)
     }, "Add Event"))));
 }
 // Annotate the CommonJS export names for ESM import in node:

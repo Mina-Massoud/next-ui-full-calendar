@@ -1,30 +1,7 @@
-# Ignore the node_modules directory
-node_modules/
-.next/
-.vscode/
-# Ignore the build and dist directories
-build/
-dist/
+# Ignore everything by default
+*
 
-# Ignore the logs
-*.log
-
-# Ignore local configuration files
-.env
-*.local
-
-# Ignore test directories and files
-test/
-tests/
-*.spec.js
-*.test.js
-
-# Ignore IDE/editor configuration files
-.idea/
-.vscode/
-*.swp
-
-# Ignore any other unwanted files
-.DS_Store
-npm-debug.log*
-yarn-error.log
+# Include only dist and tailwind config files/folder
+!dist/
+!tailwind.config.js
+!tailwind/
