@@ -754,7 +754,8 @@ var SchedulerProvider = function(param) {
             events: state,
             dispatch: dispatch,
             getters: getters,
-            handlers: handlers
+            handlers: handlers,
+            weekStartsOn: weekStartsOn
         }
     }, /* @__PURE__ */ import_react2.default.createElement(ModalProvider, null, children));
 };
@@ -1394,16 +1395,7 @@ function ShowMoreEventsModal() {
 // components/schedule/_components/view/month/month-view.tsx
 function MonthView(param) {
     var prevButton = param.prevButton, nextButton = param.nextButton, CustomEventComponent = param.CustomEventComponent, CustomEventModal = param.CustomEventModal, classNames = param.classNames;
-    var daysOfWeek = [
-        "Sat",
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri"
-    ];
-    var getters = useScheduler().getters;
+    var _useScheduler = useScheduler(), getters = _useScheduler.getters, weekStartsOn = _useScheduler.weekStartsOn;
     var showModal = useModalContext().showModal;
     var _ref = _sliced_to_array((0, import_react8.useState)(/* @__PURE__ */ new Date()), 2), currentDate = _ref[0], setCurrentDate = _ref[1];
     var daysInMonth = getters.getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear());
@@ -1422,9 +1414,8 @@ function MonthView(param) {
             getter: /*#__PURE__*/ _async_to_generator(function() {
                 var startDate, endDate;
                 return _ts_generator(this, function(_state) {
-                    startDate = new Date(/* @__PURE__ */ new Date().getFullYear(), /* @__PURE__ */ new Date().getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : 1, // Use 1 if selectedDay is undefined or null
-                    0, 0, 0, 0);
-                    endDate = new Date(/* @__PURE__ */ new Date().getFullYear(), /* @__PURE__ */ new Date().getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : 1, 23, 59, 59, 999);
+                    startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : 1, 0, 0, 0, 0);
+                    endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDay !== null && selectedDay !== void 0 ? selectedDay : 1, 23, 59, 59, 999);
                     return [
                         2,
                         {
@@ -1439,7 +1430,7 @@ function MonthView(param) {
     function handleShowMoreEvents(dayEvents) {
         var _dayEvents_;
         showModal({
-            title: dayEvents && (dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.length) && ((_dayEvents_ = dayEvents[0]) === null || _dayEvents_ === void 0 ? void 0 : _dayEvents_.startDate.toDateString()),
+            title: dayEvents && ((_dayEvents_ = dayEvents[0]) === null || _dayEvents_ === void 0 ? void 0 : _dayEvents_.startDate.toDateString()),
             body: /* @__PURE__ */ import_react8.default.createElement(ShowMoreEventsModal, null),
             getter: /*#__PURE__*/ _async_to_generator(function() {
                 return _ts_generator(this, function(_state) {
@@ -1477,6 +1468,27 @@ function MonthView(param) {
             }
         }
     };
+    var daysOfWeek = weekStartsOn === "monday" ? [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+    ] : [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+    ];
+    var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+    var startOffset = (firstDayOfMonth.getDay() - (weekStartsOn === "monday" ? 1 : 0) + 7) % 7;
+    var prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+    var lastDateOfPrevMonth = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0).getDate();
     return /* @__PURE__ */ import_react8.default.createElement("div", null, /* @__PURE__ */ import_react8.default.createElement("div", {
         className: "flex flex-col mb-4"
     }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.motion.h2, {
@@ -1518,23 +1530,24 @@ function MonthView(param) {
         animate: "visible",
         key: currentDate.getMonth(),
         className: "grid grid-cols-7 gap-1 sm:gap-2"
-    }, Array.from({
-        length: 7
-    }, function(_, idx) {
-        var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        var dayIndex = (firstDayOfMonth.getDay() + 6) % 7;
-        var actualDayIndex = (dayIndex + idx) % 7;
-        var dayName = new Date(0, 0, 1 + actualDayIndex).toLocaleString("default", {
-            weekday: "short"
-        });
+    }, daysOfWeek.map(function(day, idx) {
         return /* @__PURE__ */ import_react8.default.createElement("div", {
             key: idx,
             className: "text-left my-8 text-4xl tracking-tighter font-medium"
-        }, dayName);
+        }, day);
+    }), Array.from({
+        length: startOffset
+    }).map(function(_, idx) {
+        return /* @__PURE__ */ import_react8.default.createElement("div", {
+            key: "offset-".concat(idx),
+            className: "h-[150px] opacity-50"
+        }, /* @__PURE__ */ import_react8.default.createElement("div", {
+            className: (0, import_clsx.default)("font-semibold relative text-3xl mb-1")
+        }, lastDateOfPrevMonth - startOffset + idx + 1));
     }), daysInMonth.map(function(dayObj) {
         var dayEvents = getters.getEventsForDay(dayObj.day, currentDate);
         return /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.motion.div, {
-            className: " hover:z-50 border-none h-[150px] rounded group flex flex-col",
+            className: "hover:z-50 border-none h-[150px] rounded group flex flex-col",
             key: dayObj.day,
             variants: itemVariants2
         }, /* @__PURE__ */ import_react8.default.createElement(import_card.Card, {
@@ -1544,10 +1557,9 @@ function MonthView(param) {
                 return handleAddEvent(dayObj.day);
             }
         }, /* @__PURE__ */ import_react8.default.createElement("div", {
-            className: (0, import_clsx.default)("font-semibold relative text-3xl mb-1", dayEvents.length > 0 ? "text-primary-600" : "text-muted-foreground", // Check if the current day, month, and year match
-            /* @__PURE__ */ new Date().getDate() === dayObj.day && /* @__PURE__ */ new Date().getMonth() === currentDate.getMonth() && /* @__PURE__ */ new Date().getFullYear() === currentDate.getFullYear() ? "text-secondary-500" : "")
+            className: (0, import_clsx.default)("font-semibold relative text-3xl mb-1", dayEvents.length > 0 ? "text-primary-600" : "text-muted-foreground", /* @__PURE__ */ new Date().getDate() === dayObj.day && /* @__PURE__ */ new Date().getMonth() === currentDate.getMonth() && /* @__PURE__ */ new Date().getFullYear() === currentDate.getFullYear() ? "text-secondary-500" : "")
         }, dayObj.day), /* @__PURE__ */ import_react8.default.createElement("div", {
-            className: "flex-grow flex flex-col gap-2  w-full overflow-hidden"
+            className: "flex-grow flex flex-col gap-2 w-full overflow-hidden"
         }, /* @__PURE__ */ import_react8.default.createElement(import_framer_motion3.AnimatePresence, {
             mode: "wait"
         }, (dayEvents === null || dayEvents === void 0 ? void 0 : dayEvents.length) > 0 && /* @__PURE__ */ import_react8.default.createElement(EventStyled, {
@@ -1562,7 +1574,7 @@ function MonthView(param) {
                 handleShowMoreEvents(dayEvents);
             },
             variant: "flat",
-            className: "hover:bg-default-200 absolute right-2 text-xs top-2 transition duration-300 "
+            className: "hover:bg-default-200 absolute right-2 text-xs top-2 transition duration-300"
         }, dayEvents.length > 1 ? "+".concat(dayEvents.length - 1) : " ")), dayEvents.length === 0 && /* @__PURE__ */ import_react8.default.createElement("div", {
             className: "absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
         }, /* @__PURE__ */ import_react8.default.createElement("span", {

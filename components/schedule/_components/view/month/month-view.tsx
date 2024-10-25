@@ -24,9 +24,9 @@ export default function MonthView({
 }: {
   prevButton?: React.ReactNode;
   nextButton?: React.ReactNode;
-  CustomEventComponent: React.FC<Event>;
-  CustomEventModal: CustomEventModal;
-  classNames?: { prev: string; next: string };
+  CustomEventComponent?: React.FC<Event>;
+  CustomEventModal?: CustomEventModal;
+  classNames?: { prev?: string; next?: string; addEvent?: string };
 }) {
   const { getters, weekStartsOn } = useScheduler();
   const { showModal } = useModalContext();
@@ -118,12 +118,20 @@ export default function MonthView({
     1
   );
 
-
-  const startOffset = (firstDayOfMonth.getDay() - (weekStartsOn === "monday" ? 1 : 0) + 7) % 7;
+  const startOffset =
+    (firstDayOfMonth.getDay() - (weekStartsOn === "monday" ? 1 : 0) + 7) % 7;
 
   // Calculate previous month's last days for placeholders
-  const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
-  const lastDateOfPrevMonth = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0).getDate();
+  const prevMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() - 1,
+    1
+  );
+  const lastDateOfPrevMonth = new Date(
+    prevMonth.getFullYear(),
+    prevMonth.getMonth() + 1,
+    0
+  ).getDate();
   return (
     <div>
       <div className="flex flex-col mb-4">
@@ -180,11 +188,9 @@ export default function MonthView({
             </div>
           ))}
 
-      {Array.from({ length: startOffset }).map((_, idx) => (
+          {Array.from({ length: startOffset }).map((_, idx) => (
             <div key={`offset-${idx}`} className="h-[150px] opacity-50">
-              <div
-                className={clsx("font-semibold relative text-3xl mb-1")}
-              >
+              <div className={clsx("font-semibold relative text-3xl mb-1")}>
                 {lastDateOfPrevMonth - startOffset + idx + 1}
               </div>
             </div>
