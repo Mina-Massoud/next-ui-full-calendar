@@ -24,12 +24,11 @@ export default function MonthView({
 }: {
   prevButton?: React.ReactNode;
   nextButton?: React.ReactNode;
-  CustomEventComponent?: React.FC<Event>;
-  CustomEventModal?: CustomEventModal;
-  classNames?: { prev?: string; next?: string; addEvent?: string };
+  CustomEventComponent: React.FC<Event>;
+  CustomEventModal: CustomEventModal;
+  classNames?: { prev: string; next: string };
 }) {
-  const daysOfWeek = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"];
-  const { getters } = useScheduler();
+  const { getters, weekStartsOn } = useScheduler();
   const { showModal } = useModalContext();
 
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -57,23 +56,23 @@ export default function MonthView({
     setCurrentDate(newDate);
   };
 
-  function handleAddEvent(selectedDay?: number) {
+  function handleAddEvent(selectedDay: number) {
     showModal({
       title: "Add Event",
       body: <AddEventModal />,
       getter: async () => {
         const startDate = new Date(
-          new Date().getFullYear(),
-          new Date().getMonth(),
-          selectedDay ?? 1, // Use 1 if selectedDay is undefined or null
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          selectedDay ?? 1,
           0,
           0,
           0,
           0
         );
         const endDate = new Date(
-          new Date().getFullYear(),
-          new Date().getMonth(),
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
           selectedDay ?? 1,
           23,
           59,
@@ -85,16 +84,11 @@ export default function MonthView({
     });
   }
 
-  function handleShowMoreEvents(dayEvents?: Event[]) {
+  function handleShowMoreEvents(dayEvents: Event[]) {
     showModal({
-      title:
-        dayEvents &&
-        dayEvents?.length &&
-        dayEvents[0]?.startDate.toDateString(),
+      title: dayEvents && dayEvents[0]?.startDate.toDateString(),
       body: <ShowMoreEventsModal />,
-      getter: async () => {
-        return { dayEvents };
-      },
+      getter: async () => ({ dayEvents }),
     });
   }
 
@@ -113,6 +107,23 @@ export default function MonthView({
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
+  const daysOfWeek =
+    weekStartsOn === "monday"
+      ? ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+      : ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const firstDayOfMonth = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
+  );
+
+
+  const startOffset = (firstDayOfMonth.getDay() - (weekStartsOn === "monday" ? 1 : 0) + 7) % 7;
+
+  // Calculate previous month's last days for placeholders
+  const prevMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+  const lastDateOfPrevMonth = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0).getDate();
   return (
     <div>
       <div className="flex flex-col mb-4">
@@ -160,36 +171,31 @@ export default function MonthView({
           key={currentDate.getMonth()}
           className="grid grid-cols-7 gap-1 sm:gap-2"
         >
-          {Array.from({ length: 7 }, (_, idx) => {
-            // Calculate the correct day of the week for the current month
-            const firstDayOfMonth = new Date(
-              currentDate.getFullYear(),
-              currentDate.getMonth(),
-              1
-            );
-            const dayIndex = (firstDayOfMonth.getDay() + 6) % 7; // Adjust for the week starting on Sunday
-            const actualDayIndex = (dayIndex + idx) % 7; // Calculate the actual day index
-            const dayName = new Date(0, 0, 1 + actualDayIndex).toLocaleString(
-              "default",
-              { weekday: "short" }
-            );
+          {daysOfWeek.map((day, idx) => (
+            <div
+              key={idx}
+              className="text-left my-8 text-4xl tracking-tighter font-medium"
+            >
+              {day}
+            </div>
+          ))}
 
-            return (
+      {Array.from({ length: startOffset }).map((_, idx) => (
+            <div key={`offset-${idx}`} className="h-[150px] opacity-50">
               <div
-                key={idx}
-                className="text-left my-8 text-4xl tracking-tighter font-medium"
+                className={clsx("font-semibold relative text-3xl mb-1")}
               >
-                {dayName}
+                {lastDateOfPrevMonth - startOffset + idx + 1}
               </div>
-            );
-          })}
+            </div>
+          ))}
 
           {daysInMonth.map((dayObj) => {
-            const dayEvents = getters.getEventsForDay(dayObj.day, currentDate); // Get events for this day
+            const dayEvents = getters.getEventsForDay(dayObj.day, currentDate);
 
             return (
               <motion.div
-                className=" hover:z-50 border-none h-[150px] rounded group flex flex-col"
+                className="hover:z-50 border-none h-[150px] rounded group flex flex-col"
                 key={dayObj.day}
                 variants={itemVariants}
               >
@@ -204,7 +210,6 @@ export default function MonthView({
                       dayEvents.length > 0
                         ? "text-primary-600"
                         : "text-muted-foreground",
-                      // Check if the current day, month, and year match
                       new Date().getDate() === dayObj.day &&
                         new Date().getMonth() === currentDate.getMonth() &&
                         new Date().getFullYear() === currentDate.getFullYear()
@@ -214,7 +219,7 @@ export default function MonthView({
                   >
                     {dayObj.day}
                   </div>
-                  <div className="flex-grow flex flex-col gap-2  w-full overflow-hidden">
+                  <div className="flex-grow flex flex-col gap-2 w-full overflow-hidden">
                     <AnimatePresence mode="wait">
                       {dayEvents?.length > 0 && (
                         <EventStyled
@@ -234,7 +239,7 @@ export default function MonthView({
                           handleShowMoreEvents(dayEvents);
                         }}
                         variant="flat"
-                        className="hover:bg-default-200 absolute right-2 text-xs top-2 transition duration-300 "
+                        className="hover:bg-default-200 absolute right-2 text-xs top-2 transition duration-300"
                       >
                         {dayEvents.length > 1
                           ? `+${dayEvents.length - 1}`

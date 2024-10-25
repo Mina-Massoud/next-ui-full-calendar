@@ -64,6 +64,7 @@ export interface SchedulerContextType {
   dispatch: Dispatch<Action>;
   getters: Getters;
   handlers: Handlers;
+  weekStartsOn: startOfWeek;
 }
 
 // Define the variant options

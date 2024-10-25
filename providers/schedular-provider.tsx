@@ -10,9 +10,15 @@ import React, {
 } from "react";
 import { z } from "zod";
 import { ModalProvider } from "./modal-provider";
-import { Action, Event, Getters, Handlers, SchedulerContextType, startOfWeek } from "@/types/index";
+import {
+  Action,
+  Event,
+  Getters,
+  Handlers,
+  SchedulerContextType,
+  startOfWeek,
+} from "@/types/index";
 // Define event and state types
-
 
 interface SchedulerState {
   events: Event[];
@@ -26,8 +32,6 @@ export const variants = [
   "warning",
   "danger",
 ] as const;
-
-
 
 // Initial state
 const initialState: SchedulerState = {
@@ -424,7 +428,7 @@ export const SchedulerProvider = ({
 
   return (
     <SchedulerContext.Provider
-      value={{ events: state, dispatch, getters, handlers }}
+      value={{ events: state, dispatch, getters, handlers, weekStartsOn }}
     >
       <ModalProvider>{children}</ModalProvider>
     </SchedulerContext.Provider>
