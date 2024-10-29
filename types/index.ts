@@ -26,7 +26,11 @@ export interface SchedulerState {
 export type Action =
   | { type: "ADD_EVENT"; payload: Event }
   | { type: "REMOVE_EVENT"; payload: { id: string } }
-  | { type: "UPDATE_EVENT"; payload: Event };
+  | { type: "UPDATE_EVENT"; payload: Event }
+  | { type: "SET_EVENTS"; payload: Event[] };
+
+
+  
 
 // Define handlers interface
 export interface Handlers {

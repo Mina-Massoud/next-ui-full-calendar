@@ -143,7 +143,7 @@ export default function DailyView({
           {getFormattedDayTitle()}
         </h1>
 
-        <div className="flex ml-auto gap-3">
+        <div className="flex ml-auto  gap-3">
           {prevButton ? (
             <div onClick={handlePrevDay}>{prevButton}</div>
           ) : (

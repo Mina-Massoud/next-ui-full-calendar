@@ -72,6 +72,78 @@ export default function Home() {
 }
 ```
 
+Here is documentation explaining how to set initial events and manage the `SchedulerProvider` and `useScheduler` hook in your `Home` component.
+
+---
+
+### Documentation: Setting Initial Events in the Scheduler Component
+
+The `SchedulerProvider` and `useScheduler` hook allow you to manage and set initial events in the scheduler. Here’s a guide to set up initial events and integrate them into your scheduling component.
+
+#### Step 1: Import Required Components and Types
+
+Ensure you Event types and your necessary modules:
+
+```typescript
+"use client";
+
+import { Event } from "@/dist";
+
+```
+
+#### Step 2: Define Initial Event Data
+
+To simulate initial events, create an array of events, each structured as an `Event` type. In this example, `endDate` is set to one hour after `startDate`.
+
+```typescript
+const events = [
+  {
+    id: "1d4c5c73-b5fa-4f67-bb6e-1d5d66cbd57d",
+    title: "Kickoff Meeting.",
+    description: "Initial project kickoff with stakeholders.",
+    startDate: new Date(), // today's date
+    endDate: new Date(new Date().getTime() + 60 * 60 * 1000), // one hour later
+    variant: "primary",
+  },
+] as Event[];
+```
+
+
+#### Step 3: Use `SchedulerProvider` to Initialize State
+
+Wrap your main content in `SchedulerProvider`, passing `initialState` and any other props like `weekStartsOn`:
+
+```typescript
+<SchedulerProvider initialState={events} weekStartsOn="monday">
+  <SchedulerWrapper
+    classNames={{
+      tabs: {
+        panel: "pt-3",
+      },
+    }}
+  />
+</SchedulerProvider>
+```
+
+#### Optional: Dispatch Events with `useScheduler` (Optional)
+
+Here's the revised text for clarity and improved grammar:
+
+---
+
+The `useScheduler` hook provides access to the `dispatch` function, allowing you to set events dynamically after the component mounts. However, **it’s not recommended to use `useScheduler` at the top level** of the component. If you use it, ensure that `SchedulerProvider` is applied at a higher level in the component tree to provide the necessary context.
+
+
+```typescript
+const { dispatch } = useScheduler();
+
+useEffect(() => {
+  dispatch({ type: "SET_EVENTS", payload: events });
+}, []);
+```
+
+
+
 ## Customized Usage
 
 You can customize the calendar by passing custom views, buttons, and event modals using the `SchedularView` and `SchedulerProvider` props:
