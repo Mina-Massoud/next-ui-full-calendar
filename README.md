@@ -72,11 +72,7 @@ export default function Home() {
 }
 ```
 
-Here is documentation explaining how to set initial events and manage the `SchedulerProvider` and `useScheduler` hook in your `Home` component.
-
----
-
-### Documentation: Setting Initial Events in the Scheduler Component
+## Setting Initial Events in the Scheduler Component
 
 The `SchedulerProvider` and `useScheduler` hook allow you to manage and set initial events in the scheduler. Here’s a guide to set up initial events and integrate them into your scheduling component.
 
