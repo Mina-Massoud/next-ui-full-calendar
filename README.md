@@ -123,10 +123,6 @@ Wrap your main content in `SchedulerProvider`, passing `initialState` and any ot
 
 #### Optional: Dispatch Events with `useScheduler` (Optional)
 
-Here's the revised text for clarity and improved grammar:
-
----
-
 The `useScheduler` hook provides access to the `dispatch` function, allowing you to set events dynamically after the component mounts. However, **it’s not recommended to use `useScheduler` at the top level** of the component. If you use it, ensure that `SchedulerProvider` is applied at a higher level in the component tree to provide the necessary context.
 
 
